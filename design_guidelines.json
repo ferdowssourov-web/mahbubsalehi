@@ -1,0 +1,163 @@
+{
+  "design_system": {
+    "identity": {
+      "brand_name": "Mahbub Salehi",
+      "tagline": "A Vision for Prosperous Ulipur",
+      "personality": "Authoritative, Trustworthy, Servant-Leader, Visionary",
+      "theme_mode": "light"
+    },
+    "typography": {
+      "font_family": {
+        "heading": "\"Noto Serif Bengali\", serif",
+        "body": "\"Hind Siliguri\", sans-serif",
+        "accent": "\"Noto Serif Bengali\", serif"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-6xl font-bold tracking-tight",
+        "h2": "text-3xl md:text-5xl font-bold tracking-tight",
+        "h3": "text-2xl md:text-3xl font-semibold",
+        "body_lg": "text-lg md:text-xl leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "caption": "text-sm text-muted-foreground uppercase tracking-widest"
+      },
+      "import_url": "@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700;900&display=swap');"
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#064e3b",
+          "foreground": "#ffffff",
+          "hover": "#022c22",
+          "description": "Deep Forest Green - Represents Growth, Islam, Prosperity, Authority"
+        },
+        "secondary": {
+          "DEFAULT": "#d97706",
+          "foreground": "#ffffff",
+          "hover": "#b45309",
+          "description": "Bronze/Gold - Represents Classic Heritage, Justice, Quality"
+        },
+        "accent": {
+          "DEFAULT": "#0f172a",
+          "foreground": "#ffffff",
+          "description": "Navy/Slate - Grounding neutral for text and strong borders"
+        },
+        "background": {
+          "DEFAULT": "#f8fafc",
+          "paper": "#ffffff",
+          "subtle": "#f1f5f9"
+        },
+        "text": {
+          "primary": "#0f172a",
+          "secondary": "#475569",
+          "muted": "#94a3b8"
+        }
+      },
+      "gradients": {
+        "hero_overlay": "linear-gradient(to right, rgba(6, 78, 59, 0.9), rgba(6, 78, 59, 0.4))",
+        "gold_shimmer": "linear-gradient(45deg, #d97706, #f59e0b, #d97706)"
+      }
+    },
+    "spacing": {
+      "container_padding": "px-4 md:px-8 lg:px-12",
+      "section_spacing": "py-16 md:py-24 lg:py-32",
+      "grid_gap": "gap-6 md:gap-8 lg:gap-12"
+    },
+    "borders": {
+      "radius": "rounded-none md:rounded-sm",
+      "width": "border-l-4",
+      "style": "solid",
+      "color": "border-secondary"
+    },
+    "shadows": {
+      "card": "shadow-[0_2px_10px_rgba(0,0,0,0.05)]",
+      "hover": "shadow-[0_10px_30px_rgba(0,0,0,0.08)]",
+      "text": "text-shadow-sm"
+    }
+  },
+  "visual_enhancers": {
+    "texture": "bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]",
+    "glassmorphism": "backdrop-blur-md bg-white/80 border-b border-white/20",
+    "micro_interactions": {
+      "button_hover": "transform hover:-translate-y-1 transition-all duration-300",
+      "card_hover": "hover:shadow-lg transition-all duration-300 hover:border-secondary/50",
+      "link_underline": "relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-secondary after:transition-all hover:after:w-full"
+    }
+  },
+  "layout_strategies": {
+    "hero": {
+      "type": "immersive_slider",
+      "description": "Full screen height minus header. Text overlay on left with deep gradient scrim. Right side focuses on candidate face.",
+      "text_alignment": "left",
+      "classes": "h-[85vh] relative flex items-center"
+    },
+    "grid_system": {
+      "mode": "Mode A: The Tetris Grid",
+      "description": "Asymmetrical layout for News and Vision sections. Avoid equal height cards everywhere.",
+      "classes": "grid grid-cols-1 md:grid-cols-12 gap-8"
+    },
+    "footer": {
+      "type": "authoritative_dark",
+      "description": "Deep primary color background (#064e3b). Gold accents. Multi-column links + Newsletter.",
+      "classes": "bg-primary text-primary-foreground py-20"
+    }
+  },
+  "assets": {
+    "images": {
+      "candidate": {
+        "profile_main": "https://media.bdji.org/images/ms-2.original.format-webp.webp",
+        "slider_1": "https://media.bdji.org/images/ms-Slider1.original.jpg",
+        "slider_2": "https://media.bdji.org/images/ms-Slider2.original.jpg"
+      },
+      "stock": {
+        "justice_law": "https://images.unsplash.com/photo-1767972463877-b64ba4283cd0?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "rural_development": "https://images.unsplash.com/photo-1766858581661-e62947f9e0b2?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "education": "https://images.unsplash.com/photo-1510395839401-f2ec7a07bbb5?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "political_rally": "https://images.unsplash.com/photo-1722871514680-0db7050f7a9b?crop=entropy&cs=srgb&fm=jpg&q=85"
+      },
+      "icons": {
+        "library": "lucide-react",
+        "style": "Stroke width 1.5px, large sizes (24px+)"
+      }
+    }
+  },
+  "components_to_use": {
+    "interactive": [
+      "Carousel (Shadcn)",
+      "Dialog (Shadcn) - For full bio read",
+      "Sheet (Shadcn) - For Mobile Menu",
+      "Form (Shadcn) - For Contact",
+      "Button (Shadcn) - Styled as 'Pill' or 'Sharp Rect'",
+      "Separator (Shadcn)"
+    ],
+    "structural": [
+      "Card (Custom HTML/Tailwind preferred for asymmetry)",
+      "Section (HTML semantic)"
+    ]
+  },
+  "instructions_to_main_agent": {
+    "setup": [
+      "Install 'lucide-react' if not present.",
+      "Update tailwind.config.js to include the custom colors (primary: #064e3b, secondary: #d97706) and fonts.",
+      "Import the Google Fonts in index.css.",
+      "Ensure 'sonner' is installed for toast notifications."
+    ],
+    "implementation_rules": [
+      "Use 'Noto Serif Bengali' for all Headings (h1-h4).",
+      "Use 'Hind Siliguri' for all body text.",
+      "For the Hero Slider, ensure the text is readable by adding a dark gradient overlay on the images.",
+      "Do NOT use standard card grids. Use col-span-2 or col-span-3 variations in grids.",
+      "Add 'data-testid' to all buttons and inputs.",
+      "Ensure the language is strictly Bengali for the UI text (use placeholders if actual Bengali text is not available, or use English as fallback but instruct to be Bengali).",
+      "Contact form must have: Name, Phone, Email, Message.",
+      "Vision section should use icons + short text in a bento grid.",
+      "Activities section should look like a newspaper snippet or editorial feed."
+    ],
+    "universal_guidelines": [
+      "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+      "Don't make generic centered layouts.",
+      "Create depth through layered design elements.",
+      "Every interaction needs micro-animations.",
+      "Use 2-3x more spacing than feels comfortable."
+    ]
+  }
+}
