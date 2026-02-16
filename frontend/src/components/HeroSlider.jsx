@@ -58,7 +58,7 @@ const HeroSlider = () => {
               className={`w-full h-full object-cover ${index === current ? 'hero-image-animate' : ''}`}
             />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/90 via-forest/70 to-forest/30" />
+            <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest/80 to-forest/40" />
           </div>
 
           {/* Content */}
