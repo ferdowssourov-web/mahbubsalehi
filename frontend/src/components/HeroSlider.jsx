@@ -59,8 +59,7 @@ const HeroSlider = () => {
           className="absolute inset-0 w-full h-full object-cover object-left"
         />
         {/* Heavy overlay to cover baked-in image text */}
-        <div className="absolute inset-0 bg-forest-deep/80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/50 via-transparent to-forest-deep/30" />
+        <div className="absolute inset-0 bg-forest-deep/90" />
 
         {/* Content */}
         <div className="absolute inset-0 flex items-center">
