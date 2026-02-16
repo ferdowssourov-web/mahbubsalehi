@@ -43,7 +43,8 @@ const ContactPage = () => {
             alt="যোগাযোগ"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest/80 to-forest/50" />
+          <div className="absolute inset-0 bg-forest-deep/90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/50 to-transparent" />
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
           <span className="text-gold font-body text-sm font-semibold tracking-widest uppercase">যোগাযোগ</span>
