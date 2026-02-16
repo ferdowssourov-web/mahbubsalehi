@@ -55,10 +55,11 @@ const HeroSlider = () => {
             <img
               src={slide.image}
               alt={slide.title}
-              className={`w-full h-full object-cover ${index === current ? 'hero-image-animate' : ''}`}
+              className={`w-full h-full object-cover object-left ${index === current ? 'hero-image-animate' : ''}`}
             />
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/95 via-forest/85 to-forest/70" />
+            {/* Heavy gradient overlay to cover baked-in image text */}
+            <div className="absolute inset-0 bg-forest-deep/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/60 via-transparent to-forest-deep/40" />
           </div>
 
           {/* Content */}
