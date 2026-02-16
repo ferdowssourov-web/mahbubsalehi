@@ -21,14 +21,15 @@ const slides = [
 
 const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [fadeIn, setFadeIn] = useState(true);
 
   const goToSlide = useCallback((index) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrent(index);
-    setTimeout(() => setIsAnimating(false), 1000);
-  }, [isAnimating]);
+    setFadeIn(false);
+    setTimeout(() => {
+      setCurrent(index);
+      setFadeIn(true);
+    }, 400);
+  }, []);
 
   const next = useCallback(() => {
     goToSlide((current + 1) % slides.length);
@@ -43,93 +44,83 @@ const HeroSlider = () => {
     return () => clearInterval(timer);
   }, [next]);
 
+  const slide = slides[current];
+
   return (
-    <section data-testid="hero-slider" className="relative h-[85vh] min-h-[600px] overflow-hidden">
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`hero-slide ${index === current ? 'active' : ''}`}
-        >
-          {/* Background image */}
-          <div className="absolute inset-0">
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className={`w-full h-full object-cover object-left ${index === current ? 'hero-image-animate' : ''}`}
-            />
-            {/* Heavy gradient overlay to cover baked-in image text */}
-            <div className="absolute inset-0 bg-forest-deep/80" />
-            <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/60 via-transparent to-forest-deep/40" />
-          </div>
+    <section data-testid="hero-slider" className="relative h-[85vh] min-h-[600px] overflow-hidden bg-forest-deep">
+      {/* Single active slide */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-700 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}
+      >
+        {/* Background image */}
+        <img
+          src={slide.image}
+          alt={slide.title}
+          className="absolute inset-0 w-full h-full object-cover object-left"
+        />
+        {/* Heavy overlay to cover baked-in image text */}
+        <div className="absolute inset-0 bg-forest-deep/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/50 via-transparent to-forest-deep/30" />
 
-          {/* Content */}
-          <div className="absolute inset-0 flex items-center">
-            <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 w-full">
-              <div className="max-w-2xl">
-                {index === current && (
-                  <>
-                    <div
-                      className="animate-fade-in-up opacity-0"
-                      style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
-                    >
-                      <span className="inline-block px-4 py-1.5 bg-gold/20 text-gold-light text-sm font-body font-medium tracking-wide border border-gold/30 mb-6">
-                        {slide.subtitle}
-                      </span>
-                    </div>
+        {/* Content */}
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 w-full">
+            <div className="max-w-2xl">
+              <div
+                className={`transition-all duration-700 delay-100 ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+              >
+                <span className="inline-block px-4 py-1.5 bg-gold/20 text-gold-light text-sm font-body font-medium tracking-wide border border-gold/30 mb-6">
+                  {slide.subtitle}
+                </span>
+              </div>
 
-                    <h1
-                      className="font-heading text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-tight mb-6 animate-fade-in-up opacity-0"
-                      style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
-                    >
-                      {slide.title}
-                    </h1>
+              <h1
+                className={`font-heading text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-tight mb-6 transition-all duration-700 delay-200 ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+              >
+                {slide.title}
+              </h1>
 
-                    <p
-                      className="font-body text-lg md:text-xl text-white/80 leading-relaxed mb-10 animate-fade-in-up opacity-0"
-                      style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
-                    >
-                      {slide.description}
-                    </p>
+              <p
+                className={`font-body text-lg md:text-xl text-white/80 leading-relaxed mb-10 transition-all duration-700 delay-300 ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+              >
+                {slide.description}
+              </p>
 
-                    <div
-                      className="animate-fade-in-up opacity-0"
-                      style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
-                    >
-                      <Link
-                        to={slide.cta.link}
-                        data-testid={`hero-cta-${index}`}
-                        className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-body font-semibold px-8 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/20"
-                      >
-                        {slide.cta.text}
-                        <ChevronRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </>
-                )}
+              <div
+                className={`transition-all duration-700 delay-[400ms] ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+              >
+                <Link
+                  to={slide.cta.link}
+                  data-testid={`hero-cta-${current}`}
+                  className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-body font-semibold px-8 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/20"
+                >
+                  {slide.cta.text}
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
         </div>
-      ))}
+      </div>
 
       {/* Navigation arrows */}
       <button
         data-testid="hero-prev"
         onClick={prev}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
       <button
         data-testid="hero-next"
         onClick={next}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
 
       {/* Slide indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {slides.map((_, index) => (
           <button
             key={index}
