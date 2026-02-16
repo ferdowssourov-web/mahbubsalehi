@@ -1,34 +1,119 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Hero Slider */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.hero-slide.active {
+  opacity: 1;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Card hover lift */
+.card-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.App-link {
-    color: #61dafb;
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Border accent left */
+.border-accent-left {
+  border-left: 4px solid var(--gold);
+}
+
+/* Image zoom on hover */
+.img-zoom-container {
+  overflow: hidden;
+}
+
+.img-zoom-container img {
+  transition: transform 0.6s ease;
+}
+
+.img-zoom-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Timeline vertical line */
+.timeline-line {
+  position: relative;
+}
+
+.timeline-line::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--forest));
+}
+
+/* Navbar glass effect */
+.navbar-glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(6, 78, 59, 0.1);
+}
+
+.navbar-glass.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Vision card pattern */
+.vision-card-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23064e3b' fill-opacity='0.03'%3E%3Cpath d='M0 0h20L10 10zm10 10L20 20H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Quote styling */
+.blockquote-styled {
+  border-left: 4px solid var(--gold);
+  padding-left: 1.5rem;
+  font-style: italic;
+  position: relative;
+}
+
+.blockquote-styled::before {
+  content: '\201C';
+  font-size: 4rem;
+  color: var(--gold);
+  position: absolute;
+  top: -1rem;
+  left: 0.5rem;
+  opacity: 0.3;
+  font-family: 'Noto Serif Bengali', serif;
+}
+
+/* Page transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Mobile menu animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideDown 0.3s ease-out forwards;
 }
