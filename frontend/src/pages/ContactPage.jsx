@@ -177,7 +177,7 @@ const ContactPage = () => {
                     type="submit"
                     data-testid="contact-submit-btn"
                     disabled={loading}
-                    className="inline-flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-8 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:pointer-events-none"
+                    className="inline-flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-8 py-3.5 w-full md:w-auto justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:pointer-events-none"
                   >
                     {loading ? (
                       <>
