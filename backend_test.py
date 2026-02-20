@@ -11,10 +11,14 @@ class BengaliPortfolioAPITester:
         self.admin_token = None
         print(f"Testing Bengali Political Portfolio API at: {self.api_url}")
 
-    def run_test(self, name, method, endpoint, expected_status, data=None):
+    def run_test(self, name, method, endpoint, expected_status, data=None, require_auth=False):
         """Run a single API test"""
         url = f"{self.api_url}/{endpoint}"
         headers = {'Content-Type': 'application/json'}
+        
+        # Add authorization header if required and token is available
+        if require_auth and self.admin_token:
+            headers['Authorization'] = f'Bearer {self.admin_token}'
 
         self.tests_run += 1
         print(f"\n🔍 Testing {name}...")
@@ -25,9 +29,12 @@ class BengaliPortfolioAPITester:
                 response = requests.get(url, headers=headers, timeout=10)
             elif method == 'POST':
                 response = requests.post(url, json=data, headers=headers, timeout=10)
+            elif method == 'PUT':
+                response = requests.put(url, json=data, headers=headers, timeout=10)
+            elif method == 'DELETE':
+                response = requests.delete(url, headers=headers, timeout=10)
 
             print(f"Response Status: {response.status_code}")
-            print(f"Response Headers: {dict(response.headers)}")
             
             success = response.status_code == expected_status
             if success:
