@@ -431,6 +431,198 @@ class BengaliPortfolioAPITester:
             print(f"❌ Static file access failed: {str(e)}")
             return False
 
+    def test_public_opinion_flow(self):
+        """Test complete Public Opinion API flow as specified in review request"""
+        print("\n" + "🗳️ TESTING PUBLIC OPINION API FLOW" + "=" * 30)
+        
+        # Step 1: Create 2 opinions via POST /api/opinions
+        opinion1_data = {
+            "name": "রহিম উদ্দিন",
+            "phone": "+8801712345678",
+            "area": "উলিপুর, কুড়িগ্রাম",
+            "opinion": "ব্যারিস্টার সালেহী সাহেবের কাজ অসাধারণ। তিনি আমাদের এলাকার উন্নয়নে অনেক অবদান রেখেছেন।",
+            "rating": 5
+        }
+        
+        opinion2_data = {
+            "name": "ফাতেমা খাতুন",
+            "phone": "+8801987654321",
+            "area": "রংপুর",
+            "opinion": "সালেহী সাহেবের নেতৃত্বে আমাদের এলাকায় শিক্ষার মান উন্নত হয়েছে। তাঁর প্রতি কৃতজ্ঞতা।",
+            "rating": 4
+        }
+        
+        # Create first opinion
+        success1, response1 = self.run_test(
+            "Create Opinion 1",
+            "POST",
+            "opinions",
+            200,
+            data=opinion1_data
+        )
+        
+        if not success1 or 'id' not in response1:
+            print("❌ Failed to create first opinion")
+            return False
+            
+        opinion1_id = response1['id']
+        print(f"✅ Created opinion 1 with ID: {opinion1_id}")
+        
+        # Create second opinion
+        success2, response2 = self.run_test(
+            "Create Opinion 2", 
+            "POST",
+            "opinions",
+            200,
+            data=opinion2_data
+        )
+        
+        if not success2 or 'id' not in response2:
+            print("❌ Failed to create second opinion")
+            return False
+            
+        opinion2_id = response2['id']
+        print(f"✅ Created opinion 2 with ID: {opinion2_id}")
+        
+        # Step 2: Verify GET /api/opinions returns empty (none approved yet)
+        success, public_opinions = self.run_test(
+            "Get Public Opinions (Should be empty)",
+            "GET",
+            "opinions",
+            200
+        )
+        
+        if not success:
+            print("❌ Failed to get public opinions")
+            return False
+            
+        if len(public_opinions) == 0:
+            print("✅ Public opinions endpoint correctly returns empty list (no approved opinions)")
+        else:
+            print(f"❌ Expected 0 approved opinions, got {len(public_opinions)}")
+            return False
+        
+        # Step 3: Login as admin (should already be done, but verify token exists)
+        if not self.admin_token:
+            print("❌ No admin token available for opinion management")
+            return False
+        
+        # Step 4: GET /api/admin/opinions - should show 2 pending opinions
+        success, admin_opinions = self.run_test(
+            "Get Admin Opinions (Should show 2 pending)",
+            "GET",
+            "admin/opinions",
+            200,
+            require_auth=True
+        )
+        
+        if not success:
+            print("❌ Failed to get admin opinions")
+            return False
+            
+        if len(admin_opinions) >= 2:
+            pending_count = sum(1 for op in admin_opinions if not op.get('is_approved', False))
+            print(f"✅ Admin opinions endpoint shows {len(admin_opinions)} total opinions, {pending_count} pending")
+        else:
+            print(f"❌ Expected at least 2 opinions, got {len(admin_opinions)}")
+            return False
+        
+        # Step 5: Approve one opinion
+        approve_data = {"is_approved": True}
+        success, approved_opinion = self.run_test(
+            "Approve Opinion 1",
+            "PUT",
+            f"admin/opinions/{opinion1_id}",
+            200,
+            data=approve_data,
+            require_auth=True
+        )
+        
+        if not success:
+            print("❌ Failed to approve opinion")
+            return False
+            
+        if approved_opinion.get('is_approved') == True:
+            print("✅ Opinion 1 approved successfully")
+        else:
+            print("❌ Opinion approval status not updated correctly")
+            return False
+        
+        # Step 6: GET /api/opinions should now show 1 approved opinion
+        success, public_opinions_after = self.run_test(
+            "Get Public Opinions (Should show 1 approved)",
+            "GET", 
+            "opinions",
+            200
+        )
+        
+        if not success:
+            print("❌ Failed to get public opinions after approval")
+            return False
+            
+        if len(public_opinions_after) == 1:
+            print("✅ Public opinions endpoint now shows 1 approved opinion")
+            approved_op = public_opinions_after[0]
+            if approved_op.get('id') == opinion1_id and approved_op.get('is_approved') == True:
+                print("✅ Correct opinion is shown as approved")
+            else:
+                print("❌ Wrong opinion shown or approval status incorrect")
+                return False
+        else:
+            print(f"❌ Expected 1 approved opinion, got {len(public_opinions_after)}")
+            return False
+        
+        # Step 7: Delete the other opinion
+        success, delete_response = self.run_test(
+            "Delete Opinion 2",
+            "DELETE",
+            f"admin/opinions/{opinion2_id}",
+            200,
+            require_auth=True
+        )
+        
+        if not success:
+            print("❌ Failed to delete opinion 2")
+            return False
+            
+        print("✅ Opinion 2 deleted successfully")
+        
+        # Step 8: Verify counts are correct
+        success, final_admin_opinions = self.run_test(
+            "Get Final Admin Opinions Count",
+            "GET",
+            "admin/opinions", 
+            200,
+            require_auth=True
+        )
+        
+        if not success:
+            print("❌ Failed to get final admin opinions count")
+            return False
+            
+        success, final_public_opinions = self.run_test(
+            "Get Final Public Opinions Count",
+            "GET",
+            "opinions",
+            200
+        )
+        
+        if not success:
+            print("❌ Failed to get final public opinions count")
+            return False
+            
+        # Count opinions that match our test (excluding any pre-existing ones)
+        our_admin_opinions = [op for op in final_admin_opinions if op.get('id') in [opinion1_id, opinion2_id]]
+        our_public_opinions = [op for op in final_public_opinions if op.get('id') in [opinion1_id, opinion2_id]]
+        
+        if len(our_admin_opinions) == 1 and len(our_public_opinions) == 1:
+            print("✅ Final counts are correct: 1 opinion remains (approved), 1 deleted")
+            print("✅ PUBLIC OPINION API FLOW TEST COMPLETED SUCCESSFULLY")
+            return True
+        else:
+            print(f"❌ Final counts incorrect - Admin: {len(our_admin_opinions)}, Public: {len(our_public_opinions)}")
+            return False
+
 def main():
     tester = BengaliPortfolioAPITester()
     
