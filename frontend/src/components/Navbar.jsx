@@ -5,22 +5,22 @@ import { useTheme } from '@/contexts/ThemeContext';
 
 const navLinks = [
   { name: 'হোম', mobileName: 'হোম', path: '/', special: false },
+  { name: 'আকাঙ্ক্ষা', mobileName: 'আকাঙ্ক্ষা', path: '/opinions', special: true },
   { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision', special: false },
   { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities', special: false },
   { name: 'গ্যালারি', mobileName: 'গ্যালারি', path: '/gallery', special: false },
   { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography', special: false },
-  { name: 'জনতার মতামত', mobileName: 'জনতার মতামত', path: '/opinions', special: true },
   { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact', special: false },
 ];
 
 const mobileNavLinks = [
   { name: 'হোম', mobileName: 'হোম', path: '/', special: false },
+  { name: 'আকাঙ্ক্ষা', mobileName: 'আকাঙ্ক্ষা', path: '/opinions', special: true },
   { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision', special: false },
   { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities', special: false },
   { name: 'গ্যালারি', mobileName: 'গ্যালারি', path: '/gallery', special: false },
   { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography', special: false },
   { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact', special: false },
-  { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions', special: true },
 ];
 
 const Navbar = () => {
