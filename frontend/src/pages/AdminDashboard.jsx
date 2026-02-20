@@ -212,6 +212,7 @@ const AdminDashboard = () => {
   const [opinions, setOpinions] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [registrations, setRegistrations] = useState([]);
+  const [countdown, setCountdown] = useState({ is_active: false, target_date: '', title: 'তারুণ্যের মুখোমুখির পরবর্তী সময়' });
   const [showForm, setShowForm] = useState(false);
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -225,6 +226,15 @@ const AdminDashboard = () => {
     setToast({ type, message });
     setTimeout(() => setToast(null), 3000);
   };
+
+  const fetchCountdown = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/countdown`);
+      setCountdown(res.data);
+    } catch (err) {
+      console.error('Failed to fetch countdown', err);
+    }
+  }, []);
 
   const fetchActivities = useCallback(async () => {
     try {
