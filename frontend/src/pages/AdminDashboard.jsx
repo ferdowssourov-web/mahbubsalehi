@@ -289,12 +289,28 @@ const AdminDashboard = () => {
     fetchOpinions();
     fetchGallery();
     fetchRegistrations();
-  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, fetchRegistrations, navigate]);
+    fetchCountdown();
+  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, fetchRegistrations, fetchCountdown, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_user');
     navigate('/admin');
+  };
+
+  // Countdown management
+  const updateCountdown = async (updates) => {
+    try {
+      const res = await axios.put(`${API}/admin/countdown`, updates, getAuthHeaders());
+      setCountdown(res.data);
+      showToast('success', 'কাউন্টডাউন আপডেট হয়েছে');
+    } catch {
+      showToast('error', 'আপডেট করতে সমস্যা হয়েছে');
+    }
+  };
+
+  const toggleCountdown = () => {
+    updateCountdown({ is_active: !countdown.is_active });
   };
 
   const resetForm = () => {
