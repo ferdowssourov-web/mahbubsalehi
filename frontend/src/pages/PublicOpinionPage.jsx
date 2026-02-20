@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Star, User, Phone, MapPin, MessageSquare, CheckCircle } from 'lucide-react';
+import { Send, User, Phone, MapPin, MessageSquare, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -9,8 +9,7 @@ const PublicOpinionPage = () => {
     name: '',
     phone: '',
     area: '',
-    opinion: '',
-    rating: 5
+    opinion: ''
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -24,34 +23,12 @@ const PublicOpinionPage = () => {
     try {
       await axios.post(`${BACKEND_URL}/api/opinions`, form);
       setSubmitted(true);
-      setForm({ name: '', phone: '', area: '', opinion: '', rating: 5 });
+      setForm({ name: '', phone: '', area: '', opinion: '' });
     } catch (err) {
       setError('মতামত জমা দিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
-  };
-
-  const renderStars = () => {
-    return (
-      <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => setForm({ ...form, rating: star })}
-            className={`p-1 transition-transform hover:scale-110 ${
-              star <= form.rating ? 'text-gold' : 'text-slate-300 dark:text-slate-600'
-            }`}
-          >
-            <Star className={`w-6 h-6 ${star <= form.rating ? 'fill-current' : ''}`} />
-          </button>
-        ))}
-        <span className="ml-2 text-sm font-body text-slate-500 dark:text-slate-400">
-          ({form.rating}/৫)
-        </span>
-      </div>
-    );
   };
 
   if (submitted) {
