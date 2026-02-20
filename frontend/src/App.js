@@ -48,6 +48,7 @@ function App() {
             <Route path="/activities/:id" element={<PublicLayout><ActivityDetailPage /></PublicLayout>} />
             <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
             <Route path="/opinions" element={<PublicLayout><PublicOpinionPage /></PublicLayout>} />
+            <Route path="/gallery" element={<PublicLayout><GalleryPage /></PublicLayout>} />
             
             {/* Admin routes - no navbar/footer */}
             <Route path="/admin" element={<AdminLogin />} />
