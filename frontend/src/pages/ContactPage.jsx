@@ -193,7 +193,7 @@ const ContactPage = () => {
               </h2>
               <div className="w-16 h-1 bg-gold mb-8" />
               <p className="font-body text-slate-600 dark:text-slate-300 leading-relaxed mb-10">
-                ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার সমস্যা, পরামর্শ বা মতামত জানাতে নিচের ফর্মটি পূরণ করে রেজিষ্ট্রেশন সম্পূর্ণ করুন।
+                {meetingAddress.description}
               </p>
 
               <div className="space-y-6">
@@ -203,7 +203,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-heading text-navy dark:text-white font-semibold mb-1">ঠিকানা</h4>
-                    <p className="font-body text-slate-600 dark:text-slate-300 text-sm">উলিপুর, কুড়িগ্রাম, বাংলাদেশ</p>
+                    <p className="font-body text-slate-600 dark:text-slate-300 text-sm">{meetingAddress.address}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-5 bg-forest/5 dark:bg-forest/10 border border-forest/10 dark:border-forest/20">
