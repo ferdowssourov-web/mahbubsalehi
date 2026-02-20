@@ -539,6 +539,19 @@ const AdminDashboard = () => {
             <Images className="w-4 h-4" />
             গ্যালারি ({galleryImages.length})
           </button>
+          <button
+            data-testid="tab-registrations"
+            onClick={() => setActiveTab('registrations')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-body font-medium text-sm transition-all ${
+              activeTab === 'registrations' ? 'bg-forest text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <CalendarCheck className="w-4 h-4" />
+            সাক্ষাৎ ({registrations.length})
+            {pendingRegistrations.length > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 bg-gold text-white text-xs rounded-full">{pendingRegistrations.length}</span>
+            )}
+          </button>
         </div>
 
         {/* Activities Tab */}
