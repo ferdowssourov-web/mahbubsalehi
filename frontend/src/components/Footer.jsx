@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Scale, MapPin, Phone, Mail, Facebook, Youtube, ArrowUp } from 'lucide-react';
+import { Scale, MapPin, Phone, Mail, Facebook, Globe, ArrowUp } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -28,7 +28,7 @@ const Footer = () => {
             </p>
             <div className="flex gap-3">
               <a
-                href="https://facebook.com"
+                href="https://web.facebook.com/BarristerMahbubSalehiOfficial"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="footer-facebook"
@@ -37,13 +37,13 @@ const Footer = () => {
                 <Facebook className="w-4 h-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href="https://mahbubsalehi.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-testid="footer-youtube"
+                data-testid="footer-website"
                 className="w-10 h-10 bg-white/10 flex items-center justify-center hover:bg-gold transition-colors duration-300"
               >
-                <Youtube className="w-4 h-4" />
+                <Globe className="w-4 h-4" />
               </a>
             </div>
           </div>
