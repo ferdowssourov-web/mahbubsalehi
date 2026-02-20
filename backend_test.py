@@ -131,6 +131,174 @@ class BengaliPortfolioAPITester:
         
         return success
 
+    def test_admin_login(self):
+        """Test admin login with correct credentials"""
+        login_data = {
+            "username": "admin",
+            "password": "admin123"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login (Valid Credentials)",
+            "POST",
+            "admin/login",
+            200,
+            data=login_data
+        )
+        
+        if success and 'token' in response:
+            self.admin_token = response['token']
+            print(f"✅ Got admin token: {self.admin_token[:20]}...")
+        
+        return success
+
+    def test_admin_login_invalid(self):
+        """Test admin login with invalid credentials"""
+        invalid_data = {
+            "username": "admin",
+            "password": "wrongpassword"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login (Invalid Credentials)",
+            "POST", 
+            "admin/login",
+            401,
+            data=invalid_data
+        )
+        
+        return success
+
+    def test_admin_me(self):
+        """Test admin authentication check"""
+        if not self.admin_token:
+            print("❌ No admin token available for authentication test")
+            return False
+            
+        success, response = self.run_test(
+            "Admin Authentication Check",
+            "GET",
+            "admin/me", 
+            200,
+            require_auth=True
+        )
+        
+        if success and 'username' in response:
+            print(f"✅ Authenticated as: {response['username']}")
+        
+        return success
+
+    def test_activities_public(self):
+        """Test public activities endpoint"""
+        success, response = self.run_test(
+            "GET Activities (Public)",
+            "GET",
+            "activities",
+            200
+        )
+        
+        if success and isinstance(response, list):
+            print(f"✅ Retrieved {len(response)} published activities")
+            return True
+            
+        return False
+
+    def test_activities_crud(self):
+        """Test activities CRUD operations with admin auth"""
+        if not self.admin_token:
+            print("❌ No admin token available for CRUD tests")
+            return False
+
+        # Test creating a new activity
+        new_activity = {
+            "title": f"পরীক্ষামূলক কার্যক্রম {datetime.now().strftime('%H%M%S')}",
+            "category": "পরীক্ষা",
+            "image_url": "https://example.com/test.jpg",
+            "content": "এটি একটি পরীক্ষামূলক কার্যক্রম পোস্ট।",
+            "date": "২০২৫",
+            "is_published": True
+        }
+        
+        success, response = self.run_test(
+            "POST Activity (Create)",
+            "POST",
+            "activities",
+            200,
+            data=new_activity,
+            require_auth=True
+        )
+        
+        if not success or 'id' not in response:
+            print("❌ Failed to create activity")
+            return False
+            
+        activity_id = response['id']
+        print(f"✅ Created activity with ID: {activity_id}")
+
+        # Test updating the activity
+        update_data = {
+            "title": "আপডেট করা কার্যক্রম",
+            "is_published": False
+        }
+        
+        success, response = self.run_test(
+            "PUT Activity (Update)",
+            "PUT",
+            f"activities/{activity_id}",
+            200,
+            data=update_data,
+            require_auth=True
+        )
+        
+        if not success:
+            print("❌ Failed to update activity")
+            return False
+
+        # Test getting the specific activity
+        success, response = self.run_test(
+            "GET Single Activity",
+            "GET",
+            f"activities/{activity_id}",
+            200
+        )
+        
+        if success and response.get('title') == "আপডেট করা কার্যক্রম":
+            print("✅ Activity updated successfully")
+        
+        # Test deleting the activity
+        success, response = self.run_test(
+            "DELETE Activity",
+            "DELETE",
+            f"activities/{activity_id}",
+            200,
+            require_auth=True
+        )
+        
+        if success:
+            print("✅ Activity deleted successfully")
+        
+        return success
+
+    def test_admin_contacts(self):
+        """Test admin contacts endpoint"""
+        if not self.admin_token:
+            print("❌ No admin token available for contacts test")
+            return False
+            
+        success, response = self.run_test(
+            "GET Admin Contacts",
+            "GET",
+            "admin/contacts",
+            200,
+            require_auth=True
+        )
+        
+        if success and isinstance(response, list):
+            print(f"✅ Retrieved {len(response)} contact messages")
+            return True
+            
+        return False
+
 def main():
     tester = BengaliPortfolioAPITester()
     
