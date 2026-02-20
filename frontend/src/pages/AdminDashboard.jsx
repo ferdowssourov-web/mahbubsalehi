@@ -1173,16 +1173,26 @@ const AdminDashboard = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-2xl text-navy font-bold">সাক্ষাৎ রেজিষ্ট্রেশন</h2>
-              <div className="flex items-center gap-4 text-sm font-body">
-                <span className="flex items-center gap-1 text-amber-600">
-                  <Clock className="w-4 h-4" /> অপেক্ষমান: {pendingRegistrations.length}
-                </span>
-                <span className="flex items-center gap-1 text-blue-600">
-                  <CheckCircle2 className="w-4 h-4" /> অনুমোদিত: {approvedRegistrations.length}
-                </span>
-                <span className="flex items-center gap-1 text-emerald-600">
-                  <Check className="w-4 h-4" /> সম্পন্ন: {completedRegistrations.length}
-                </span>
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 text-sm font-body">
+                  <span className="flex items-center gap-1 text-amber-600">
+                    <Clock className="w-4 h-4" /> অপেক্ষমান: {pendingRegistrations.length}
+                  </span>
+                  <span className="flex items-center gap-1 text-blue-600">
+                    <CheckCircle2 className="w-4 h-4" /> অনুমোদিত: {approvedRegistrations.length}
+                  </span>
+                  <span className="flex items-center gap-1 text-emerald-600">
+                    <Check className="w-4 h-4" /> সম্পন্ন: {completedRegistrations.length}
+                  </span>
+                </div>
+                <button
+                  onClick={handleDownloadRegistrationsExcel}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-body rounded-sm transition-colors shadow-sm"
+                  title="Excel ফাইল ডাউনলোড করুন"
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="hidden sm:inline">Excel ডাউনলোড</span>
+                </button>
               </div>
             </div>
 
