@@ -119,6 +119,28 @@ class PublicOpinionCreate(BaseModel):
 class PublicOpinionUpdate(BaseModel):
     is_approved: Optional[bool] = None
 
+# Meeting Registration Models
+class MeetingRegistration(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    phone: str
+    area: str = ""
+    subject: str = ""
+    message: str = ""
+    status: str = "pending"  # pending, approved, completed, cancelled
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class MeetingRegistrationCreate(BaseModel):
+    name: str
+    phone: str
+    area: str = ""
+    subject: str = ""
+    message: str = ""
+
+class MeetingRegistrationUpdate(BaseModel):
+    status: Optional[str] = None
+
 # Gallery Image Models
 class GalleryImage(BaseModel):
     model_config = ConfigDict(extra="ignore")
