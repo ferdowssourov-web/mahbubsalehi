@@ -208,6 +208,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('activities');
   const [activities, setActivities] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [opinions, setOpinions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ title: '', category: '', image_url: '', content: '', date: '', is_published: true });
@@ -238,12 +239,22 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+  const fetchOpinions = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/admin/opinions`, getAuthHeaders());
+      setOpinions(res.data);
+    } catch (err) {
+      if (err.response?.status === 401) { navigate('/admin'); return; }
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (!token) { navigate('/admin'); return; }
     fetchActivities();
     fetchContacts();
-  }, [fetchActivities, fetchContacts, navigate]);
+    fetchOpinions();
+  }, [fetchActivities, fetchContacts, fetchOpinions, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
