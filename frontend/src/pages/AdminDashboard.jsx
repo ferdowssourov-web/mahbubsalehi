@@ -644,6 +644,16 @@ const AdminDashboard = () => {
               <span className="ml-1 w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
             )}
           </button>
+          <button
+            data-testid="tab-meeting-address"
+            onClick={() => setActiveTab('meeting-address')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-body font-medium text-sm transition-all ${
+              activeTab === 'meeting-address' ? 'bg-forest text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <MapPin className="w-4 h-4" />
+            রেজিঃ ঠিকানা
+          </button>
         </div>
 
         {/* Activities Tab */}
