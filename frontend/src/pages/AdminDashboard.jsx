@@ -209,9 +209,12 @@ const AdminDashboard = () => {
   const [activities, setActivities] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [opinions, setOpinions] = useState([]);
+  const [galleryImages, setGalleryImages] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ title: '', category: '', image_url: '', content: '', date: '', is_published: true });
+  const [galleryForm, setGalleryForm] = useState({ image_url: '', caption: '', category: 'local' });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
@@ -248,13 +251,23 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+  const fetchGallery = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/admin/gallery`, getAuthHeaders());
+      setGalleryImages(res.data);
+    } catch (err) {
+      if (err.response?.status === 401) { navigate('/admin'); return; }
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (!token) { navigate('/admin'); return; }
     fetchActivities();
     fetchContacts();
     fetchOpinions();
-  }, [fetchActivities, fetchContacts, fetchOpinions, navigate]);
+    fetchGallery();
+  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
