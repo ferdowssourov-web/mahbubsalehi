@@ -104,10 +104,6 @@ const Footer = () => {
                 <span className="font-body text-white/60 text-sm">উলিপুর, কুড়িগ্রাম, বাংলাদেশ</span>
               </li>
               <li className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                <span className="font-body text-white/60 text-sm">+৮৮০ ১XXXXXXXXX</span>
-              </li>
-              <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
                 <span className="font-body text-white/60 text-sm">info@mahbubsalehi.com</span>
               </li>
