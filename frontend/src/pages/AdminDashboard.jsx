@@ -303,7 +303,8 @@ const AdminDashboard = () => {
     fetchGallery();
     fetchRegistrations();
     fetchCountdown();
-  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, fetchRegistrations, fetchCountdown, navigate]);
+    fetchMeetingAddress();
+  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, fetchRegistrations, fetchCountdown, fetchMeetingAddress, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
