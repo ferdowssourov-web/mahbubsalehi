@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   Scale, LogOut, Plus, Pencil, Trash2, Eye, EyeOff,
   Newspaper, MessageSquare, X, Save, AlertCircle, CheckCircle,
-  Upload, Image as ImageIcon, Loader2, GripVertical, Users, Star, Check, XCircle, Images
+  Upload, Image as ImageIcon, Loader2, GripVertical, Users, Star, Check, XCircle, Images,
+  CalendarCheck, Clock, CheckCircle2, XOctagon, MapPin
 } from 'lucide-react';
 import axios from 'axios';
 
