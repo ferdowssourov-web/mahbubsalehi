@@ -141,6 +141,19 @@ class MeetingRegistrationCreate(BaseModel):
 class MeetingRegistrationUpdate(BaseModel):
     status: Optional[str] = None
 
+# Countdown Settings Model
+class CountdownSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "countdown_settings"
+    is_active: bool = False
+    target_date: str = ""  # ISO format date string
+    title: str = "তারুণ্যের মুখোমুখির পরবর্তী সময়"
+
+class CountdownSettingsUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    target_date: Optional[str] = None
+    title: Optional[str] = None
+
 # Gallery Image Models
 class GalleryImage(BaseModel):
     model_config = ConfigDict(extra="ignore")
