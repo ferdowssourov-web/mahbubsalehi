@@ -871,6 +871,167 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+        {/* Gallery Tab */}
+        {activeTab === 'gallery' && (
+          <div>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-heading text-2xl text-navy font-bold">গ্যালারি পরিচালনা</h2>
+              <button
+                data-testid="new-gallery-btn"
+                onClick={() => { resetGalleryForm(); setShowGalleryForm(true); }}
+                className="flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-body font-semibold px-5 py-2.5 transition-all duration-300"
+              >
+                <Plus className="w-4 h-4" />
+                নতুন ছবি
+              </button>
+            </div>
+
+            {/* Add Image Form */}
+            {showGalleryForm && (
+              <div data-testid="gallery-form" className="bg-white border border-slate-200 p-6 md:p-8 mb-8 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-heading text-xl text-navy font-bold">নতুন ছবি যোগ করুন</h3>
+                  <button onClick={resetGalleryForm} className="text-slate-400 hover:text-slate-600">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleGallerySubmit} className="space-y-6">
+                  {/* Image uploader */}
+                  <ImageUploader
+                    value={galleryForm.image_url}
+                    onChange={(url) => setGalleryForm({ ...galleryForm, image_url: url })}
+                  />
+
+                  {/* Category */}
+                  <div>
+                    <label className="block font-body text-sm text-navy font-medium mb-2">ক্যাটাগরি *</label>
+                    <select
+                      value={galleryForm.category}
+                      onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
+                      className="w-full md:w-1/2 px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
+                    >
+                      <option value="local">স্থানীয় কার্যক্রম (উলিপুর)</option>
+                      <option value="international">আন্তর্জাতিক অঙ্গন</option>
+                    </select>
+                  </div>
+
+                  {/* Caption */}
+                  <div>
+                    <label className="block font-body text-sm text-navy font-medium mb-2">ক্যাপশন (ঐচ্ছিক)</label>
+                    <input
+                      type="text"
+                      value={galleryForm.caption}
+                      onChange={(e) => setGalleryForm({ ...galleryForm, caption: e.target.value })}
+                      className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
+                      placeholder="ছবির বিবরণ"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-2 border-t border-slate-100">
+                    <button
+                      type="submit"
+                      disabled={loading || !galleryForm.image_url}
+                      className="flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-6 py-3 transition-all duration-300 disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
+                      যোগ করুন
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetGalleryForm}
+                      className="px-6 py-3 border border-slate-300 text-slate-600 font-body font-medium hover:bg-slate-50 transition-colors"
+                    >
+                      বাতিল
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Local Gallery Section */}
+            <div className="mb-8">
+              <h3 className="font-body text-sm font-semibold text-forest mb-3 uppercase tracking-wide">
+                স্থানীয় কার্যক্রম - উলিপুর ({localGallery.length})
+              </h3>
+              {localGallery.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {localGallery.map((image) => (
+                    <div key={image.id} className="relative group aspect-square bg-slate-100 overflow-hidden">
+                      <img
+                        src={getImageUrl(image.image_url)}
+                        alt={image.caption || 'Gallery image'}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
+                        <button
+                          onClick={() => handleDeleteGalleryImage(image.id)}
+                          className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="মুছুন"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      {image.caption && (
+                        <p className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 truncate">
+                          {image.caption}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-slate-400 font-body bg-slate-50 border border-dashed border-slate-200">
+                  এই বিভাগে কোনো ছবি নেই
+                </div>
+              )}
+            </div>
+
+            {/* International Gallery Section */}
+            <div>
+              <h3 className="font-body text-sm font-semibold text-blue-600 mb-3 uppercase tracking-wide">
+                আন্তর্জাতিক অঙ্গন ({internationalGallery.length})
+              </h3>
+              {internationalGallery.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {internationalGallery.map((image) => (
+                    <div key={image.id} className="relative group aspect-square bg-slate-100 overflow-hidden">
+                      <img
+                        src={getImageUrl(image.image_url)}
+                        alt={image.caption || 'Gallery image'}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
+                        <button
+                          onClick={() => handleDeleteGalleryImage(image.id)}
+                          className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          title="মুছুন"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      {image.caption && (
+                        <p className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 truncate">
+                          {image.caption}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-slate-400 font-body bg-slate-50 border border-dashed border-slate-200">
+                  এই বিভাগে কোনো ছবি নেই
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
