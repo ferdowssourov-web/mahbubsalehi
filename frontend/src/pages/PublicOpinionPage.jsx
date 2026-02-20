@@ -130,13 +130,19 @@ const PublicOpinionPage = () => {
                 <MapPin className="w-4 h-4 text-forest dark:text-emerald-400" />
                 এলাকা / ইউনিয়ন
               </label>
-              <input
-                type="text"
-                value={form.area}
-                onChange={(e) => setForm({ ...form, area: e.target.value })}
-                className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors"
-                placeholder="আপনার এলাকার নাম"
-              />
+              <div className="relative">
+                <select
+                  value={form.area}
+                  onChange={(e) => setForm({ ...form, area: e.target.value })}
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors appearance-none cursor-pointer"
+                >
+                  <option value="">এলাকা নির্বাচন করুন</option>
+                  {AREA_OPTIONS.map((area) => (
+                    <option key={area} value={area}>{area}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+              </div>
             </div>
 
             {/* Opinion */}
