@@ -1,46 +1,29 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar } from 'lucide-react';
+import axios from 'axios';
 
-const activities = [
-  {
-    id: 1,
-    title: 'ব্যারিস্টার মাহবুবুল আলম সালেহী: উলিপুরের এক অদম্য সংগ্রামীর গল্প',
-    image: 'https://media.bdji.org/images/1211.original.format-webp.webp',
-    date: '২০২৫',
-    category: 'ব্যক্তিত্ব',
-  },
-  {
-    id: 2,
-    title: 'জামায়াতে ইসলামীর কেন্দ্রীয় নির্বাহী পরিষদের বৈঠক',
-    image: 'https://media.bdji.org/images/557585451_122151827564749601_11561.original.format-webp.webp',
-    date: '২০২৫',
-    category: 'রাজনীতি',
-  },
-  {
-    id: 3,
-    title: 'কুড়িগ্রামে জামায়াতের মিছিল ও জেলা প্রশাসকের কাছে স্মারকলিপি প্রদান',
-    image: 'https://media.bdji.org/images/4242.original.format-webp.webp',
-    date: '২০২৫',
-    category: 'কার্যক্রম',
-  },
-  {
-    id: 4,
-    title: 'নিন্দা ও প্রতিবাদ বার্তা',
-    image: 'https://media.bdji.org/images/121212.original.format-webp.webp',
-    date: '২০২৫',
-    category: 'বিবৃতি',
-  },
-  {
-    id: 5,
-    title: 'সমৃদ্ধ উলিপুর গড়ার লক্ষ্যে রংপুরে উলিপুরবাসীর মতবিনিময় সভা অনুষ্ঠিত',
-    image: 'https://media.bdji.org/images/557602506_122136658088904504_46541.original.format-webp.webp',
-    date: '২০২৫',
-    category: 'সভা',
-  },
-];
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const res = await axios.get(`${API}/activities`);
+        setActivities(res.data);
+      } catch (e) {
+        console.error('Failed to fetch activities', e);
+      }
+    };
+    fetchActivities();
+  }, []);
+
   const displayActivities = activities.slice(0, limit);
+
+  if (displayActivities.length === 0) return null;
 
   return (
     <section data-testid="activities-section" className="py-20 md:py-28 bg-slate-50">
@@ -73,7 +56,7 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
               <div className="relative overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 h-full">
                 <div className="img-zoom-container aspect-[16/10]">
                   <img
-                    src={displayActivities[0].image}
+                    src={displayActivities[0].image_url}
                     alt={displayActivities[0].title}
                     className="w-full h-full object-cover"
                   />
@@ -105,7 +88,7 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
               >
                 <div className="img-zoom-container w-32 md:w-40 flex-shrink-0">
                   <img
-                    src={activity.image}
+                    src={activity.image_url}
                     alt={activity.title}
                     className="w-full h-full object-cover aspect-square"
                   />
@@ -131,5 +114,4 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
   );
 };
 
-export { activities };
 export default ActivitiesSection;
