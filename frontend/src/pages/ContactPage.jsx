@@ -1,13 +1,47 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { MapPin, Mail, Send, CheckCircle, AlertCircle, User, Phone, FileText, MessageSquare, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+const AREA_OPTIONS = [
+  'উলিপুর পৌরসভা',
+  'গুনাইগাছ ইউনিয়ন',
+  'দূর্গাপুর ইউনিয়ন',
+  'বেগমগঞ্জ ইউনিয়ন',
+  'বুড়াবুড়ি ইউনিয়ন',
+  'বজরা ইউনিয়ন',
+  'দলদলিয়া ইউনিয়ন',
+  'ধামশ্রেণী ইউনিয়ন',
+  'ধরণীবাড়ী ইউনিয়ন',
+  'হাতিয়া ইউনিয়ন',
+  'পান্ডুল ইউনিয়ন',
+  'সাহেবের আলগা ইউনিয়ন',
+  'তবকপুর ইউনিয়ন',
+  'থেতরাই ইউনিয়ন',
+];
+
+const SUBJECT_OPTIONS = [
+  'ব্যক্তিগত সমস্যা',
+  'সামাজিক সমস্যা',
+  'উন্নয়ন পরামর্শ',
+  'শিক্ষা বিষয়ক',
+  'স্বাস্থ্য বিষয়ক',
+  'কৃষি বিষয়ক',
+  'কর্মসংস্থান বিষয়ক',
+  'অন্যান্য',
+];
+
 const ContactPage = () => {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
-  const [status, setStatus] = useState(null); // 'success' | 'error' | null
+  const [form, setForm] = useState({ 
+    name: '', 
+    phone: '', 
+    area: '', 
+    subject: '',
+    message: '' 
+  });
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,9 +57,9 @@ const ContactPage = () => {
     setLoading(true);
     setStatus(null);
     try {
-      await axios.post(`${API}/contact`, form);
+      await axios.post(`${API}/registrations`, form);
       setStatus('success');
-      setForm({ name: '', phone: '', email: '', message: '' });
+      setForm({ name: '', phone: '', area: '', subject: '', message: '' });
     } catch {
       setStatus('error');
     } finally {
@@ -55,7 +89,7 @@ const ContactPage = () => {
       <section className="py-16 md:py-24 bg-white dark:bg-slate-800">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* Contact Info */}
+            {/* Info Section */}
             <div className="lg:col-span-5">
               <h2 className="font-heading text-2xl md:text-3xl text-navy dark:text-white font-bold mb-4">
                 সাক্ষাতের জন্য রেজিষ্ট্রেশন
@@ -67,48 +101,52 @@ const ContactPage = () => {
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4 p-5 bg-forest/5 dark:bg-forest/10 border border-forest/10 dark:border-forest/20">
-                  <div className="w-12 h-12 bg-forest/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-forest" />
+                  <div className="w-12 h-12 bg-forest/10 dark:bg-forest/20 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-forest dark:text-emerald-400" />
                   </div>
                   <div>
-                    <h4 className="font-heading text-navy font-semibold mb-1">ঠিকানা</h4>
-                    <p className="font-body text-slate-600 text-sm">উলিপুর, কুড়িগ্রাম, বাংলাদেশ</p>
+                    <h4 className="font-heading text-navy dark:text-white font-semibold mb-1">ঠিকানা</h4>
+                    <p className="font-body text-slate-600 dark:text-slate-300 text-sm">উলিপুর, কুড়িগ্রাম, বাংলাদেশ</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 p-5 bg-forest/5 border border-forest/10">
-                  <div className="w-12 h-12 bg-forest/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-forest" />
+                <div className="flex items-start gap-4 p-5 bg-forest/5 dark:bg-forest/10 border border-forest/10 dark:border-forest/20">
+                  <div className="w-12 h-12 bg-forest/10 dark:bg-forest/20 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-forest dark:text-emerald-400" />
                   </div>
                   <div>
-                    <h4 className="font-heading text-navy font-semibold mb-1">ইমেইল</h4>
-                    <p className="font-body text-slate-600 text-sm">info@mahbubsalehi.com</p>
+                    <h4 className="font-heading text-navy dark:text-white font-semibold mb-1">ইমেইল</h4>
+                    <p className="font-body text-slate-600 dark:text-slate-300 text-sm">info@mahbubsalehi.com</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form */}
+            {/* Registration Form */}
             <div className="lg:col-span-7">
-              <div className="bg-slate-50 p-8 md:p-10 border border-slate-200">
-                <h3 className="font-heading text-xl text-navy font-bold mb-6">মেসেজ পাঠান</h3>
+              <div className="bg-slate-50 dark:bg-slate-700 p-8 md:p-10 border border-slate-200 dark:border-slate-600 rounded-lg">
+                <h3 className="font-heading text-xl text-navy dark:text-white font-bold mb-6">রেজিষ্ট্রেশন ফর্ম</h3>
 
                 {status === 'success' && (
-                  <div data-testid="contact-success" className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 mb-6">
+                  <div data-testid="contact-success" className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 mb-6 rounded-lg">
                     <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                    <p className="font-body text-sm">আপনার মেসেজ সফলভাবে পাঠানো হয়েছে। ধন্যবাদ!</p>
+                    <p className="font-body text-sm">আপনার রেজিষ্ট্রেশন সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।</p>
                   </div>
                 )}
                 {status === 'error' && (
-                  <div data-testid="contact-error" className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 text-red-700 mb-6">
+                  <div data-testid="contact-error" className="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 mb-6 rounded-lg">
                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                    <p className="font-body text-sm">মেসেজ পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>
+                    <p className="font-body text-sm">রেজিষ্ট্রেশন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Name & Phone */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block font-body text-sm text-navy font-medium mb-2">আপনার নাম *</label>
+                      <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
+                        <User className="w-4 h-4 text-forest dark:text-emerald-400" />
+                        আপনার নাম *
+                      </label>
                       <input
                         type="text"
                         name="name"
@@ -116,12 +154,15 @@ const ContactPage = () => {
                         value={form.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
+                        className="w-full px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors rounded"
                         placeholder="আপনার নাম লিখুন"
                       />
                     </div>
                     <div>
-                      <label className="block font-body text-sm text-navy font-medium mb-2">ফোন নম্বর *</label>
+                      <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
+                        <Phone className="w-4 h-4 text-forest dark:text-emerald-400" />
+                        মোবাইল নম্বর *
+                      </label>
                       <input
                         type="tel"
                         name="phone"
@@ -129,25 +170,64 @@ const ContactPage = () => {
                         value={form.phone}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
-                        placeholder="আপনার ফোন নম্বর"
+                        className="w-full px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors rounded"
+                        placeholder="০১XXXXXXXXX"
                       />
                     </div>
                   </div>
+
+                  {/* Area Selection */}
                   <div>
-                    <label className="block font-body text-sm text-navy font-medium mb-2">ইমেইল</label>
-                    <input
-                      type="email"
-                      name="email"
-                      data-testid="contact-email-input"
-                      value={form.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
-                      placeholder="আপনার ইমেইল (ঐচ্ছিক)"
-                    />
+                    <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
+                      <MapPin className="w-4 h-4 text-forest dark:text-emerald-400" />
+                      এলাকা / ইউনিয়ন *
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="area"
+                        value={form.area}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors appearance-none cursor-pointer rounded"
+                      >
+                        <option value="">এলাকা নির্বাচন করুন</option>
+                        {AREA_OPTIONS.map((area) => (
+                          <option key={area} value={area}>{area}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
                   </div>
+
+                  {/* Subject Selection */}
                   <div>
-                    <label className="block font-body text-sm text-navy font-medium mb-2">মেসেজ *</label>
+                    <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
+                      <FileText className="w-4 h-4 text-forest dark:text-emerald-400" />
+                      বিষয় *
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="subject"
+                        value={form.subject}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors appearance-none cursor-pointer rounded"
+                      >
+                        <option value="">বিষয় নির্বাচন করুন</option>
+                        {SUBJECT_OPTIONS.map((subject) => (
+                          <option key={subject} value={subject}>{subject}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
+                      <MessageSquare className="w-4 h-4 text-forest dark:text-emerald-400" />
+                      আপনার বার্তা / সমস্যার বিবরণ *
+                    </label>
                     <textarea
                       name="message"
                       data-testid="contact-message-input"
@@ -155,25 +235,27 @@ const ContactPage = () => {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors resize-none"
-                      placeholder="আপনার মেসেজ লিখুন"
+                      className="w-full px-4 py-3 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 font-body text-navy dark:text-white focus:outline-none focus:border-forest dark:focus:border-emerald-400 focus:ring-1 focus:ring-forest dark:focus:ring-emerald-400 transition-colors resize-none rounded"
+                      placeholder="আপনার সমস্যা, পরামর্শ বা মতামত বিস্তারিত লিখুন..."
                     />
                   </div>
+
+                  {/* Submit Button */}
                   <button
                     type="submit"
                     data-testid="contact-submit-btn"
                     disabled={loading}
-                    className="inline-flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-8 py-3.5 w-full md:w-auto justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:pointer-events-none"
+                    className="inline-flex items-center gap-2 bg-gold hover:bg-gold-dark text-white font-body font-semibold px-8 py-4 w-full justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:pointer-events-none rounded-lg"
                   >
                     {loading ? (
                       <>
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        পাঠানো হচ্ছে...
+                        <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        রেজিষ্ট্রেশন হচ্ছে...
                       </>
                     ) : (
                       <>
-                        <Send className="w-4 h-4" />
-                        মেসেজ পাঠান
+                        <Send className="w-5 h-5" />
+                        রেজিষ্ট্রেশন সম্পন্ন করুন
                       </>
                     )}
                   </button>
