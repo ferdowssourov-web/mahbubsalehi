@@ -1246,6 +1246,99 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Countdown Tab */}
+        {activeTab === 'countdown' && (
+          <div>
+            <h2 className="font-heading text-2xl text-navy font-bold mb-6">কাউন্টডাউন টাইমার সেটিংস</h2>
+            
+            <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-lg max-w-2xl">
+              {/* On/Off Toggle */}
+              <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
+                <div>
+                  <h3 className="font-heading text-lg text-navy font-semibold mb-1">কাউন্টডাউন অন/অফ</h3>
+                  <p className="font-body text-sm text-slate-500">
+                    কাউন্টডাউন টাইমার রেজিষ্ট্রেশন পেজে দেখাবে
+                  </p>
+                </div>
+                <button
+                  onClick={toggleCountdown}
+                  className={`relative w-14 h-7 rounded-full transition-colors ${
+                    countdown.is_active ? 'bg-emerald-500' : 'bg-slate-300'
+                  }`}
+                >
+                  <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${
+                    countdown.is_active ? 'translate-x-7' : 'translate-x-0.5'
+                  }`}>
+                    <Power className={`w-4 h-4 m-1 ${countdown.is_active ? 'text-emerald-500' : 'text-slate-400'}`} />
+                  </span>
+                </button>
+              </div>
+
+              {/* Status Badge */}
+              <div className="mb-6">
+                {countdown.is_active ? (
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100 text-emerald-700 font-body text-sm rounded-full">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                    কাউন্টডাউন সক্রিয়
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-slate-500 font-body text-sm rounded-full">
+                    <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
+                    কাউন্টডাউন নিষ্ক্রিয়
+                  </span>
+                )}
+              </div>
+
+              {/* Title Input */}
+              <div className="mb-6">
+                <label className="flex items-center gap-2 font-body text-sm text-navy font-medium mb-2">
+                  <MessageSquare className="w-4 h-4 text-forest" />
+                  শিরোনাম
+                </label>
+                <input
+                  type="text"
+                  value={countdown.title || ''}
+                  onChange={(e) => setCountdown({ ...countdown, title: e.target.value })}
+                  className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors rounded"
+                  placeholder="তারুণ্যের মুখোমুখির পরবর্তী সময়"
+                />
+              </div>
+
+              {/* Target Date Input */}
+              <div className="mb-8">
+                <label className="flex items-center gap-2 font-body text-sm text-navy font-medium mb-2">
+                  <Calendar className="w-4 h-4 text-forest" />
+                  টার্গেট তারিখ ও সময়
+                </label>
+                <input
+                  type="datetime-local"
+                  value={countdown.target_date ? countdown.target_date.slice(0, 16) : ''}
+                  onChange={(e) => setCountdown({ ...countdown, target_date: e.target.value ? new Date(e.target.value).toISOString() : '' })}
+                  className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors rounded"
+                />
+                {countdown.target_date && (
+                  <p className="font-body text-xs text-slate-500 mt-2">
+                    নির্ধারিত সময়: {new Date(countdown.target_date).toLocaleString('bn-BD')}
+                  </p>
+                )}
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={() => updateCountdown({ 
+                  is_active: countdown.is_active, 
+                  target_date: countdown.target_date, 
+                  title: countdown.title 
+                })}
+                className="flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-6 py-3 rounded transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                সংরক্ষণ করুন
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
