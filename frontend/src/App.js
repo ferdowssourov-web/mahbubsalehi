@@ -41,6 +41,7 @@ function App() {
           <Route path="/biography" element={<PublicLayout><BiographyPage /></PublicLayout>} />
           <Route path="/vision" element={<PublicLayout><VisionPage /></PublicLayout>} />
           <Route path="/activities" element={<PublicLayout><ActivitiesPage /></PublicLayout>} />
+          <Route path="/activities/:id" element={<PublicLayout><ActivityDetailPage /></PublicLayout>} />
           <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
           
           {/* Admin routes - no navbar/footer */}
