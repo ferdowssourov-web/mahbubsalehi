@@ -122,15 +122,6 @@ const PublicOpinionPage = () => {
               />
             </div>
 
-            {/* Rating */}
-            <div>
-              <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-3">
-                <Star className="w-4 h-4 text-forest dark:text-emerald-400" />
-                আপনার রেটিং
-              </label>
-              {renderStars()}
-            </div>
-
             {/* Opinion */}
             <div>
               <label className="flex items-center gap-2 font-body text-sm text-navy dark:text-slate-200 font-medium mb-2">
