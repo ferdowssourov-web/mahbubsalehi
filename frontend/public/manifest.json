@@ -1,0 +1,27 @@
+{
+  "short_name": "ব্যারিস্টার সালহী",
+  "name": "ব্যারিস্টার মাহবুবুল আলম সালহী - জনতার এমপি",
+  "description": "জনতার এমপি ব্যারিস্টার মাহবুবুল আলম সালহীর অফিসিয়াল ওয়েবসাইট",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#064e3b",
+  "background_color": "#ffffff",
+  "lang": "bn"
+}
