@@ -368,8 +368,46 @@ const AdminDashboard = () => {
     }
   };
 
+  // Gallery management functions
+  const resetGalleryForm = () => {
+    setGalleryForm({ image_url: '', caption: '', category: 'local' });
+    setShowGalleryForm(false);
+  };
+
+  const handleGallerySubmit = async (e) => {
+    e.preventDefault();
+    if (!galleryForm.image_url) {
+      showToast('error', 'ছবি আপলোড করুন');
+      return;
+    }
+    setLoading(true);
+    try {
+      await axios.post(`${API}/admin/gallery`, galleryForm, getAuthHeaders());
+      showToast('success', 'ছবি যোগ করা হয়েছে');
+      resetGalleryForm();
+      fetchGallery();
+    } catch {
+      showToast('error', 'ছবি যোগ করতে সমস্যা হয়েছে');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteGalleryImage = async (id) => {
+    if (!window.confirm('আপনি কি নিশ্চিত এই ছবি মুছে ফেলতে চান?')) return;
+    try {
+      await axios.delete(`${API}/admin/gallery/${id}`, getAuthHeaders());
+      showToast('success', 'ছবি মুছে ফেলা হয়েছে');
+      fetchGallery();
+    } catch {
+      showToast('error', 'মুছে ফেলতে সমস্যা হয়েছে');
+    }
+  };
+
   const approvedOpinions = opinions.filter(o => o.is_approved);
   const pendingOpinions = opinions.filter(o => !o.is_approved);
+  const localGallery = galleryImages.filter(img => img.category === 'local');
+  const internationalGallery = galleryImages.filter(img => img.category === 'international');
 
   return (
     <main data-testid="admin-dashboard" className="min-h-screen bg-slate-50">
