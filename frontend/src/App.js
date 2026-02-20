@@ -11,6 +11,7 @@ import ActivitiesPage from "@/pages/ActivitiesPage";
 import ActivityDetailPage from "@/pages/ActivityDetailPage";
 import ContactPage from "@/pages/ContactPage";
 import PublicOpinionPage from "@/pages/PublicOpinionPage";
+import GalleryPage from "@/pages/GalleryPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 
