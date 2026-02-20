@@ -475,6 +475,16 @@ const AdminDashboard = () => {
               <span className="ml-1 px-1.5 py-0.5 bg-gold text-white text-xs rounded-full">{pendingOpinions.length}</span>
             )}
           </button>
+          <button
+            data-testid="tab-gallery"
+            onClick={() => setActiveTab('gallery')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-body font-medium text-sm transition-all ${
+              activeTab === 'gallery' ? 'bg-forest text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Images className="w-4 h-4" />
+            গ্যালারি ({galleryImages.length})
+          </button>
         </div>
 
         {/* Activities Tab */}
