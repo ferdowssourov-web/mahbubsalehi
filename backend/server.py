@@ -97,6 +97,28 @@ class AdminLoginResponse(BaseModel):
     token: str
     username: str
 
+# Public Opinion (জনতার মতামত) Models
+class PublicOpinion(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    phone: str
+    area: str = ""
+    opinion: str
+    rating: int = 5
+    is_approved: bool = False
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class PublicOpinionCreate(BaseModel):
+    name: str
+    phone: str
+    area: str = ""
+    opinion: str
+    rating: int = 5
+
+class PublicOpinionUpdate(BaseModel):
+    is_approved: Optional[bool] = None
+
 
 # ======== Auth Helpers ========
 
