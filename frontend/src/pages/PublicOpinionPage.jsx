@@ -1,8 +1,25 @@
 import { useState } from 'react';
-import { Send, User, Phone, MapPin, MessageSquare, CheckCircle } from 'lucide-react';
+import { Send, User, Phone, MapPin, MessageSquare, CheckCircle, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+const AREA_OPTIONS = [
+  'উলিপুর পৌরসভা',
+  'গুনাইগাছ ইউনিয়ন',
+  'দূর্গাপুর ইউনিয়ন',
+  'বেগমগঞ্জ ইউনিয়ন',
+  'বুড়াবুড়ি ইউনিয়ন',
+  'বজরা ইউনিয়ন',
+  'দলদলিয়া ইউনিয়ন',
+  'ধামশ্রেণী ইউনিয়ন',
+  'ধরণীবাড়ী ইউনিয়ন',
+  'হাতিয়া ইউনিয়ন',
+  'পান্ডুল ইউনিয়ন',
+  'সাহেবের আলগা ইউনিয়ন',
+  'তবকপুর ইউনিয়ন',
+  'থেতরাই ইউনিয়ন',
+];
 
 const PublicOpinionPage = () => {
   const [form, setForm] = useState({
