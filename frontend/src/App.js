@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import HomePage from "@/pages/HomePage";
 import BiographyPage from "@/pages/BiographyPage";
 import VisionPage from "@/pages/VisionPage";
+import VisionDetailPage from "@/pages/VisionDetailPage";
 import ActivitiesPage from "@/pages/ActivitiesPage";
 import ActivityDetailPage from "@/pages/ActivityDetailPage";
 import ContactPage from "@/pages/ContactPage";
