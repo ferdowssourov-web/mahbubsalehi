@@ -16,6 +16,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -32,8 +33,8 @@ const Navbar = () => {
       data-testid="navbar"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'navbar-glass shadow-md'
-          : 'bg-white/70 backdrop-blur-md'
+          ? 'navbar-glass shadow-md dark:bg-slate-900/95 dark:border-b dark:border-slate-700'
+          : 'bg-white/70 backdrop-blur-md dark:bg-slate-900/70'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
@@ -44,14 +45,14 @@ const Navbar = () => {
             data-testid="navbar-logo"
             className="flex items-center gap-3 group"
           >
-            <div className="w-10 h-10 bg-forest rounded-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+            <div className="w-10 h-10 bg-forest dark:bg-emerald-700 rounded-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
               <Scale className="w-5 h-5 text-gold" />
             </div>
             <div className="hidden sm:block">
-              <p className="font-heading text-forest font-bold text-lg leading-tight">
+              <p className="font-heading text-forest dark:text-emerald-400 font-bold text-lg leading-tight">
                 ব্যারিস্টার সালেহী
               </p>
-              <p className="text-xs text-slate-500 font-body">কুড়িগ্রাম-৩ (উলিপুর)</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-body">কুড়িগ্রাম-৩ (উলিপুর)</p>
             </div>
           </Link>
 
@@ -64,29 +65,56 @@ const Navbar = () => {
                 data-testid={`nav-link-${link.path.replace('/', '') || 'home'}`}
                 className={`px-4 py-2 text-sm font-body font-medium rounded-sm transition-all duration-300 ${
                   location.pathname === link.path
-                    ? 'text-forest bg-forest/5 border-b-2 border-gold'
-                    : 'text-slate-700 hover:text-forest hover:bg-forest/5'
+                    ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-b-2 border-gold'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
                 }`}
               >
                 {link.name}
               </Link>
             ))}
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              data-testid="theme-toggle"
+              className="ml-2 p-2 rounded-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-gold" />
+              ) : (
+                <Moon className="w-5 h-5 text-forest" />
+              )}
+            </button>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            data-testid="mobile-menu-toggle"
-            className="md:hidden p-2 text-forest"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile: Theme toggle + Menu */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              data-testid="mobile-theme-toggle"
+              className="p-2 rounded-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-gold" />
+              ) : (
+                <Moon className="w-5 h-5 text-forest" />
+              )}
+            </button>
+            <button
+              data-testid="mobile-menu-toggle"
+              className="p-2 text-forest dark:text-emerald-400"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-lg border-t border-forest/10 mobile-menu-enter">
+        <div className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-forest/10 dark:border-slate-700 mobile-menu-enter">
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <Link
@@ -95,11 +123,11 @@ const Navbar = () => {
                 data-testid={`mobile-nav-${link.path.replace('/', '') || 'home'}`}
                 className={`block px-4 py-3 rounded-sm font-body font-medium transition-all ${
                   location.pathname === link.path
-                    ? 'text-forest bg-forest/5 border-l-4 border-gold'
-                    : 'text-slate-600 hover:text-forest hover:bg-forest/5'
+                    ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-l-4 border-gold'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
                 }`}
               >
-                {link.name}
+                {link.mobileName}
               </Link>
             ))}
           </div>
