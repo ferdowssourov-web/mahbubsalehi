@@ -240,6 +240,15 @@ const AdminDashboard = () => {
     }
   }, []);
 
+  const fetchMeetingAddress = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/meeting-address`);
+      setMeetingAddress(res.data);
+    } catch (err) {
+      console.error('Failed to fetch meeting address', err);
+    }
+  }, []);
+
   const fetchActivities = useCallback(async () => {
     try {
       const res = await axios.get(`${API}/activities?published_only=false`, getAuthHeaders());
