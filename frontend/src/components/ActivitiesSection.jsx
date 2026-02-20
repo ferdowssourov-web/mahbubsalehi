@@ -6,6 +6,12 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+const getImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('/api/uploads/')) return `${BACKEND_URL}${url}`;
+  return url;
+};
+
 const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
   const [activities, setActivities] = useState([]);
 
@@ -52,11 +58,15 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
           {/* Large featured card */}
           {displayActivities[0] && (
-            <div className="md:col-span-7 group" data-testid="activity-card-featured">
+            <Link
+              to={`/activities/${displayActivities[0].id}`}
+              className="md:col-span-7 group"
+              data-testid="activity-card-featured"
+            >
               <div className="relative overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 h-full">
                 <div className="img-zoom-container aspect-[16/10]">
                   <img
-                    src={displayActivities[0].image_url}
+                    src={getImageUrl(displayActivities[0].image_url)}
                     alt={displayActivities[0].title}
                     className="w-full h-full object-cover"
                   />
@@ -75,20 +85,21 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           )}
 
           {/* Stacked side cards */}
           <div className="md:col-span-5 flex flex-col gap-6 md:gap-8">
             {displayActivities.slice(1, 4).map((activity, idx) => (
-              <div
+              <Link
                 key={activity.id}
+                to={`/activities/${activity.id}`}
                 data-testid={`activity-card-${idx + 1}`}
                 className="group flex gap-4 bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
               >
                 <div className="img-zoom-container w-32 md:w-40 flex-shrink-0">
                   <img
-                    src={activity.image_url}
+                    src={getImageUrl(activity.image_url)}
                     alt={activity.title}
                     className="w-full h-full object-cover aspect-square"
                   />
@@ -105,7 +116,7 @@ const ActivitiesSection = ({ limit = 4, showHeader = true }) => {
                     {activity.date}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
