@@ -486,6 +486,31 @@ async def delete_registration(reg_id: str, username: str = Depends(verify_token)
     return {"message": "Registration deleted"}
 
 
+# ======== Countdown Settings ========
+
+@api_router.get("/countdown", response_model=CountdownSettings)
+async def get_countdown_settings():
+    settings = await db.countdown_settings.find_one({"id": "countdown_settings"}, {"_id": 0})
+    if not settings:
+        default = CountdownSettings()
+        await db.countdown_settings.insert_one(default.model_dump())
+        return default
+    return CountdownSettings(**settings)
+
+@api_router.put("/admin/countdown", response_model=CountdownSettings)
+async def update_countdown_settings(input: CountdownSettingsUpdate, username: str = Depends(verify_token)):
+    existing = await db.countdown_settings.find_one({"id": "countdown_settings"}, {"_id": 0})
+    if not existing:
+        default = CountdownSettings()
+        await db.countdown_settings.insert_one(default.model_dump())
+        existing = default.model_dump()
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    await db.countdown_settings.update_one({"id": "countdown_settings"}, {"$set": update_data})
+    updated = await db.countdown_settings.find_one({"id": "countdown_settings"}, {"_id": 0})
+    return CountdownSettings(**updated)
+
+
 # ======== Image Upload ========
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
