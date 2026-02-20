@@ -664,6 +664,152 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Opinions Tab */}
+        {activeTab === 'opinions' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-heading text-2xl text-navy font-bold">জনতার মতামত</h2>
+              <div className="flex items-center gap-4 text-sm font-body">
+                <span className="flex items-center gap-1 text-emerald-600">
+                  <Check className="w-4 h-4" /> অনুমোদিত: {approvedOpinions.length}
+                </span>
+                <span className="flex items-center gap-1 text-amber-600">
+                  <AlertCircle className="w-4 h-4" /> অপেক্ষমান: {pendingOpinions.length}
+                </span>
+              </div>
+            </div>
+
+            {/* Pending opinions first */}
+            {pendingOpinions.length > 0 && (
+              <div className="mb-8">
+                <h3 className="font-body text-sm font-semibold text-amber-600 mb-3 uppercase tracking-wide">
+                  অনুমোদনের অপেক্ষায় ({pendingOpinions.length})
+                </h3>
+                <div className="space-y-3">
+                  {pendingOpinions.map((opinion) => (
+                    <div
+                      key={opinion.id}
+                      data-testid={`opinion-row-${opinion.id}`}
+                      className="bg-amber-50 border border-amber-200 p-5 hover:shadow-sm transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
+                            <h4 className="font-heading text-base text-navy font-semibold">{opinion.name}</h4>
+                            <span className="text-xs font-body text-slate-500">{opinion.phone}</span>
+                            {opinion.area && (
+                              <span className="text-xs font-body px-2 py-0.5 bg-slate-100 text-slate-600">{opinion.area}</span>
+                            )}
+                            <div className="flex items-center gap-0.5">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                  key={star}
+                                  className={`w-3 h-3 ${star <= opinion.rating ? 'text-gold fill-gold' : 'text-slate-300'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="font-body text-slate-700 text-sm leading-relaxed">{opinion.opinion}</p>
+                          <p className="font-body text-xs text-slate-400 mt-2">
+                            {new Date(opinion.created_at).toLocaleString('bn-BD')}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button
+                            data-testid={`approve-opinion-${opinion.id}`}
+                            onClick={() => toggleOpinionApproval(opinion)}
+                            className="p-2 text-emerald-600 hover:bg-emerald-100 rounded-sm transition-colors"
+                            title="অনুমোদন করুন"
+                          >
+                            <Check className="w-5 h-5" />
+                          </button>
+                          <button
+                            data-testid={`delete-opinion-${opinion.id}`}
+                            onClick={() => handleDeleteOpinion(opinion.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-sm transition-colors"
+                            title="মুছুন"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Approved opinions */}
+            {approvedOpinions.length > 0 && (
+              <div>
+                <h3 className="font-body text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wide">
+                  অনুমোদিত মতামত ({approvedOpinions.length})
+                </h3>
+                <div className="space-y-3">
+                  {approvedOpinions.map((opinion) => (
+                    <div
+                      key={opinion.id}
+                      data-testid={`opinion-row-${opinion.id}`}
+                      className="bg-white border border-slate-200 p-5 hover:shadow-sm transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
+                            <h4 className="font-heading text-base text-navy font-semibold">{opinion.name}</h4>
+                            <span className="text-xs font-body text-slate-500">{opinion.phone}</span>
+                            {opinion.area && (
+                              <span className="text-xs font-body px-2 py-0.5 bg-slate-100 text-slate-600">{opinion.area}</span>
+                            )}
+                            <div className="flex items-center gap-0.5">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                  key={star}
+                                  className={`w-3 h-3 ${star <= opinion.rating ? 'text-gold fill-gold' : 'text-slate-300'}`}
+                                />
+                              ))}
+                            </div>
+                            <span className="text-xs font-body px-2 py-0.5 bg-emerald-100 text-emerald-700 flex items-center gap-1">
+                              <Check className="w-3 h-3" /> অনুমোদিত
+                            </span>
+                          </div>
+                          <p className="font-body text-slate-700 text-sm leading-relaxed">{opinion.opinion}</p>
+                          <p className="font-body text-xs text-slate-400 mt-2">
+                            {new Date(opinion.created_at).toLocaleString('bn-BD')}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button
+                            data-testid={`unapprove-opinion-${opinion.id}`}
+                            onClick={() => toggleOpinionApproval(opinion)}
+                            className="p-2 text-amber-600 hover:bg-amber-50 rounded-sm transition-colors"
+                            title="অনুমোদন বাতিল"
+                          >
+                            <XCircle className="w-4 h-4" />
+                          </button>
+                          <button
+                            data-testid={`delete-opinion-${opinion.id}`}
+                            onClick={() => handleDeleteOpinion(opinion.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-sm transition-colors"
+                            title="মুছুন"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {opinions.length === 0 && (
+              <div className="text-center py-16 text-slate-400 font-body">
+                কোনো মতামত নেই।
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
