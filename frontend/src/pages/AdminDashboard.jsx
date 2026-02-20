@@ -578,6 +578,19 @@ const AdminDashboard = () => {
               <span className="ml-1 px-1.5 py-0.5 bg-gold text-white text-xs rounded-full">{pendingRegistrations.length}</span>
             )}
           </button>
+          <button
+            data-testid="tab-countdown"
+            onClick={() => setActiveTab('countdown')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-body font-medium text-sm transition-all ${
+              activeTab === 'countdown' ? 'bg-forest text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Timer className="w-4 h-4" />
+            কাউন্টডাউন
+            {countdown.is_active && (
+              <span className="ml-1 w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            )}
+          </button>
         </div>
 
         {/* Activities Tab */}
