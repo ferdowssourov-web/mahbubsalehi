@@ -1402,6 +1402,57 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Meeting Address Settings Tab */}
+        {activeTab === 'meeting-address' && (
+          <div>
+            <h2 className="font-heading text-2xl text-navy font-bold mb-6">সাক্ষাতের ঠিকানা সেটিংস</h2>
+            
+            <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-lg max-w-2xl">
+              {/* Address Input */}
+              <div className="mb-6">
+                <label className="flex items-center gap-2 font-body text-sm text-navy font-medium mb-2">
+                  <MapPin className="w-4 h-4 text-forest" />
+                  ঠিকানা
+                </label>
+                <input
+                  type="text"
+                  value={meetingAddress.address || ''}
+                  onChange={(e) => setMeetingAddress({ ...meetingAddress, address: e.target.value })}
+                  className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors rounded"
+                  placeholder="উলিপুর, কুড়িগ্রাম, বাংলাদেশ"
+                />
+              </div>
+
+              {/* Description Textarea */}
+              <div className="mb-8">
+                <label className="flex items-center gap-2 font-body text-sm text-navy font-medium mb-2">
+                  <MessageSquare className="w-4 h-4 text-forest" />
+                  বিবরণ
+                </label>
+                <textarea
+                  value={meetingAddress.description || ''}
+                  onChange={(e) => setMeetingAddress({ ...meetingAddress, description: e.target.value })}
+                  rows="4"
+                  className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors rounded resize-none"
+                  placeholder="ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান..."
+                />
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={() => updateMeetingAddress({ 
+                  address: meetingAddress.address, 
+                  description: meetingAddress.description 
+                })}
+                className="flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-6 py-3 rounded transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                সংরক্ষণ করুন
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
