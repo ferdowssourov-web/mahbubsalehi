@@ -34,39 +34,39 @@ const ContactPage = () => {
   };
 
   return (
-    <main data-testid="contact-page">
+    <main data-testid="contact-page" className="dark:bg-slate-900">
       {/* Page Hero */}
       <section className="relative h-[40vh] min-h-[300px] flex items-center overflow-hidden bg-forest-deep">
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")`
         }} />
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
-          <span className="text-gold font-body text-sm font-semibold tracking-widest uppercase">যোগাযোগ</span>
+          <span className="text-gold font-body text-sm font-semibold tracking-widest uppercase">Registration</span>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white font-bold mt-3">
-            যোগাযোগ করুন
+            Meet With Barrister Salehi
           </h1>
-          <p className="font-body text-white/70 text-lg mt-4">
-            আপনার মতামত, পরামর্শ বা প্রশ্ন আমাদের কাছে পৌঁছে দিন
+          <p className="font-body text-white/70 text-lg mt-4 max-w-2xl">
+            ব্যারিস্টার মাহবুব সালেহীর সাথে সাক্ষাৎ করে আপনার আকাঙ্ক্ষা, সমস্যা ও মতামত জানাতে রেজিষ্ট্রেশন করুন।
           </p>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white dark:bg-slate-800">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             {/* Contact Info */}
             <div className="lg:col-span-5">
-              <h2 className="font-heading text-2xl md:text-3xl text-navy font-bold mb-4">
-                আমাদের সাথে যুক্ত হোন
+              <h2 className="font-heading text-2xl md:text-3xl text-navy dark:text-white font-bold mb-4">
+                সাক্ষাতের জন্য রেজিষ্ট্রেশন
               </h2>
               <div className="w-16 h-1 bg-gold mb-8" />
-              <p className="font-body text-slate-600 leading-relaxed mb-10">
-                ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার সমস্যা, পরামর্শ বা মতামত জানাতে নিচের ফর্মটি পূরণ করুন অথবা সরাসরি যোগাযোগ করুন।
+              <p className="font-body text-slate-600 dark:text-slate-300 leading-relaxed mb-10">
+                ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার আকাঙ্ক্ষা, সমস্যা বা মতামত জানাতে নিচের ফর্মটি পূরণ করুন।
               </p>
 
               <div className="space-y-6">
-                <div className="flex items-start gap-4 p-5 bg-forest/5 border border-forest/10">
+                <div className="flex items-start gap-4 p-5 bg-forest/5 dark:bg-forest/10 border border-forest/10 dark:border-forest/20">
                   <div className="w-12 h-12 bg-forest/10 flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-5 h-5 text-forest" />
                   </div>
