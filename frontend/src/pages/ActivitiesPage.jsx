@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Calendar, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+
+const getImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('/api/uploads/')) return `${BACKEND_URL}${url}`;
+  return url;
+};
 
 const ActivitiesPage = () => {
   const [activities, setActivities] = useState([]);
@@ -57,15 +64,16 @@ const ActivitiesPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {activities.map((activity, idx) => (
-                <div
+                <Link
                   key={activity.id}
+                  to={`/activities/${activity.id}`}
                   data-testid={`activity-page-card-${idx}`}
-                  className="group bg-white shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden"
+                  className="group bg-white shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden hover:-translate-y-1"
                 >
                   {activity.image_url && (
                     <div className="img-zoom-container aspect-[16/10]">
                       <img
-                        src={activity.image_url}
+                        src={getImageUrl(activity.image_url)}
                         alt={activity.title}
                         className="w-full h-full object-cover"
                       />
@@ -85,12 +93,16 @@ const ActivitiesPage = () => {
                       {activity.title}
                     </h3>
                     {activity.content && (
-                      <p className="font-body text-slate-500 text-sm mt-3 line-clamp-3">
+                      <p className="font-body text-slate-500 text-sm mt-3 line-clamp-2">
                         {activity.content}
                       </p>
                     )}
+                    <div className="flex items-center gap-1 mt-4 text-forest font-body text-sm font-semibold group-hover:text-gold transition-colors">
+                      বিস্তারিত পড়ুন
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
