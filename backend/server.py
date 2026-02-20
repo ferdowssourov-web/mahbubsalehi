@@ -436,6 +436,43 @@ async def delete_gallery_image(image_id: str, username: str = Depends(verify_tok
     return {"message": "Image deleted"}
 
 
+# ======== Meeting Registration (সাক্ষাৎ রেজিষ্ট্রেশন) ========
+
+@api_router.post("/registrations", response_model=MeetingRegistration)
+async def create_registration(input: MeetingRegistrationCreate):
+    reg_dict = input.model_dump()
+    reg_obj = MeetingRegistration(**reg_dict)
+    doc = reg_obj.model_dump()
+    _ = await db.meeting_registrations.insert_one(doc)
+    return reg_obj
+
+@api_router.get("/admin/registrations", response_model=List[MeetingRegistration])
+async def get_admin_registrations(username: str = Depends(verify_token)):
+    registrations = await db.meeting_registrations.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return registrations
+
+@api_router.put("/admin/registrations/{reg_id}", response_model=MeetingRegistration)
+async def update_registration(reg_id: str, input: MeetingRegistrationUpdate, username: str = Depends(verify_token)):
+    existing = await db.meeting_registrations.find_one({"id": reg_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Registration not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    if update_data.get("status") and update_data["status"] not in ["pending", "approved", "completed", "cancelled"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    await db.meeting_registrations.update_one({"id": reg_id}, {"$set": update_data})
+    updated = await db.meeting_registrations.find_one({"id": reg_id}, {"_id": 0})
+    return MeetingRegistration(**updated)
+
+@api_router.delete("/admin/registrations/{reg_id}")
+async def delete_registration(reg_id: str, username: str = Depends(verify_token)):
+    result = await db.meeting_registrations.delete_one({"id": reg_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Registration not found")
+    return {"message": "Registration deleted"}
+
+
 # ======== Image Upload ========
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
