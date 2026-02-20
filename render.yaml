@@ -1,0 +1,30 @@
+services:
+  # Backend Service
+  - type: web
+    name: mahbubsalehi-backend
+    env: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: salehi_portfolio
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  # Frontend Service
+  - type: web
+    name: mahbubsalehi-frontend
+    env: static
+    buildCommand: cd frontend && yarn install && yarn build
+    staticPublishPath: frontend/build
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://mahbubsalehi-backend.onrender.com/api/*
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        value: https://mahbubsalehi-backend.onrender.com
