@@ -328,6 +328,46 @@ async def delete_contact(contact_id: str, username: str = Depends(verify_token))
         raise HTTPException(status_code=404, detail="Contact not found")
     return {"message": "Contact deleted"}
 
+
+# ======== Public Opinion (জনতার মতামত) ========
+
+@api_router.post("/opinions", response_model=PublicOpinion)
+async def create_opinion(input: PublicOpinionCreate):
+    opinion_dict = input.model_dump()
+    opinion_obj = PublicOpinion(**opinion_dict)
+    doc = opinion_obj.model_dump()
+    _ = await db.public_opinions.insert_one(doc)
+    return opinion_obj
+
+@api_router.get("/opinions", response_model=List[PublicOpinion])
+async def get_opinions(approved_only: bool = True):
+    query = {"is_approved": True} if approved_only else {}
+    opinions = await db.public_opinions.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return opinions
+
+@api_router.get("/admin/opinions", response_model=List[PublicOpinion])
+async def get_admin_opinions(username: str = Depends(verify_token)):
+    opinions = await db.public_opinions.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return opinions
+
+@api_router.put("/admin/opinions/{opinion_id}", response_model=PublicOpinion)
+async def update_opinion(opinion_id: str, input: PublicOpinionUpdate, username: str = Depends(verify_token)):
+    existing = await db.public_opinions.find_one({"id": opinion_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Opinion not found")
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    await db.public_opinions.update_one({"id": opinion_id}, {"$set": update_data})
+    updated = await db.public_opinions.find_one({"id": opinion_id}, {"_id": 0})
+    return PublicOpinion(**updated)
+
+@api_router.delete("/admin/opinions/{opinion_id}")
+async def delete_opinion(opinion_id: str, username: str = Depends(verify_token)):
+    result = await db.public_opinions.delete_one({"id": opinion_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Opinion not found")
+    return {"message": "Opinion deleted"}
+
 # ======== Image Upload ========
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
