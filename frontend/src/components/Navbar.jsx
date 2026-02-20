@@ -129,15 +129,26 @@ const Navbar = () => {
         <div className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-forest/10 dark:border-slate-700 mobile-menu-enter">
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                data-testid={`mobile-nav-${link.path.replace('/', '') || 'home'}`}
-                className={`block px-4 py-3 rounded-sm font-body font-medium transition-all ${
-                  location.pathname === link.path
-                    ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-l-4 border-gold'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
-                }`}
+              link.special ? (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-testid={`mobile-nav-${link.path.replace('/', '') || 'home'}`}
+                  className="block px-4 py-3 rounded-md font-body font-bold bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-md animate-pulse-subtle"
+                >
+                  {link.mobileName}
+                </Link>
+              ) : (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-testid={`mobile-nav-${link.path.replace('/', '') || 'home'}`}
+                  className={`block px-4 py-3 rounded-sm font-body font-medium transition-all ${
+                    location.pathname === link.path
+                      ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-l-4 border-gold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
+                  }`}
+                >
               >
                 {link.mobileName}
               </Link>
