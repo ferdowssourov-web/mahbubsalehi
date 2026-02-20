@@ -323,6 +323,17 @@ const AdminDashboard = () => {
     }
   };
 
+  // Meeting Address management
+  const updateMeetingAddress = async (updates) => {
+    try {
+      const res = await axios.put(`${API}/admin/meeting-address`, updates, getAuthHeaders());
+      setMeetingAddress(res.data);
+      showToast('success', 'ঠিকানা আপডেট হয়েছে');
+    } catch {
+      showToast('error', 'আপডেট করতে সমস্যা হয়েছে');
+    }
+  };
+
   const toggleCountdown = () => {
     updateCountdown({ is_active: !countdown.is_active });
   };
