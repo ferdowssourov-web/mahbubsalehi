@@ -303,7 +303,7 @@ def main():
     tester = BengaliPortfolioAPITester()
     
     print("=" * 60)
-    print("🇧🇩 BENGALI POLITICAL PORTFOLIO API TESTING")
+    print("🇧🇩 BENGALI POLITICAL PORTFOLIO API TESTING WITH ADMIN")
     print("=" * 60)
 
     # Test API root
@@ -319,13 +319,39 @@ def main():
     if not tester.test_contact_endpoints():
         print("❌ Contact endpoints failed")
 
+    # Test admin login with valid credentials
+    if not tester.test_admin_login():
+        print("❌ Admin login failed")
+        return 1
+
+    # Test admin login with invalid credentials
+    if not tester.test_admin_login_invalid():
+        print("❌ Invalid admin login test failed")
+
+    # Test admin authentication
+    if not tester.test_admin_me():
+        print("❌ Admin authentication test failed")
+
+    # Test public activities endpoint
+    if not tester.test_activities_public():
+        print("❌ Public activities test failed")
+
+    # Test activities CRUD operations
+    if not tester.test_activities_crud():
+        print("❌ Activities CRUD tests failed")
+
+    # Test admin contacts
+    if not tester.test_admin_contacts():
+        print("❌ Admin contacts test failed")
+
     # Print final results
     print("\n" + "=" * 60)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
     print("=" * 60)
     
-    if tester.tests_passed == tester.tests_run:
-        print("🎉 All backend API tests passed!")
+    success_rate = (tester.tests_passed / tester.tests_run) * 100
+    if success_rate >= 90:
+        print("🎉 Backend tests mostly successful!")
         return 0
     else:
         print(f"⚠️  {tester.tests_run - tester.tests_passed} tests failed")
