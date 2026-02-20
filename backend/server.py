@@ -489,6 +489,104 @@ async def delete_registration(reg_id: str, username: str = Depends(verify_token)
         raise HTTPException(status_code=404, detail="Registration not found")
     return {"message": "Registration deleted"}
 
+@api_router.get("/admin/registrations/export/excel")
+async def export_registrations_excel(username: str = Depends(verify_token)):
+    """Export all meeting registrations as Excel file"""
+    try:
+        # Fetch all registrations
+        registrations = await db.meeting_registrations.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+        
+        # Create workbook
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "সাক্ষাৎ রেজিষ্ট্রেশন"
+        
+        # Define headers with Bengali labels
+        headers = [
+            "ক্রমিক নং",
+            "নাম",
+            "মোবাইল নম্বর",
+            "এলাকা",
+            "বিষয়",
+            "বার্তা",
+            "স্ট্যাটাস",
+            "তারিখ ও সময়"
+        ]
+        
+        # Style for header row
+        header_fill = PatternFill(start_color="064e3b", end_color="064e3b", fill_type="solid")
+        header_font = Font(bold=True, color="FFFFFF", size=12)
+        header_alignment = Alignment(horizontal="center", vertical="center")
+        
+        # Write headers
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = header_alignment
+        
+        # Status translation
+        status_map = {
+            "pending": "অপেক্ষমাণ",
+            "approved": "অনুমোদিত",
+            "completed": "সম্পন্ন",
+            "cancelled": "বাতিল"
+        }
+        
+        # Write data rows
+        for row_num, reg in enumerate(registrations, 2):
+            # Format created_at timestamp
+            try:
+                created_dt = datetime.fromisoformat(reg.get("created_at", ""))
+                formatted_date = created_dt.strftime("%d/%m/%Y %I:%M %p")
+            except:
+                formatted_date = reg.get("created_at", "")
+            
+            row_data = [
+                row_num - 1,  # Serial number
+                reg.get("name", ""),
+                reg.get("phone", ""),
+                reg.get("area", ""),
+                reg.get("subject", ""),
+                reg.get("message", ""),
+                status_map.get(reg.get("status", "pending"), "অপেক্ষমাণ"),
+                formatted_date
+            ]
+            
+            for col_num, value in enumerate(row_data, 1):
+                cell = ws.cell(row=row_num, column=col_num)
+                cell.value = value
+                cell.alignment = Alignment(horizontal="left", vertical="top", wrap_text=True)
+        
+        # Adjust column widths
+        column_widths = [10, 25, 18, 20, 30, 40, 15, 25]
+        for col_num, width in enumerate(column_widths, 1):
+            ws.column_dimensions[chr(64 + col_num)].width = width
+        
+        # Set row height for header
+        ws.row_dimensions[1].height = 25
+        
+        # Save to bytes buffer
+        excel_buffer = io.BytesIO()
+        wb.save(excel_buffer)
+        excel_buffer.seek(0)
+        
+        # Generate filename with current date
+        filename = f"registrations_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        
+        # Return as streaming response
+        return StreamingResponse(
+            excel_buffer,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={
+                "Content-Disposition": f"attachment; filename={filename}"
+            }
+        )
+    except Exception as e:
+        logging.error(f"Error exporting registrations: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
+
 
 # ======== Countdown Settings ========
 
