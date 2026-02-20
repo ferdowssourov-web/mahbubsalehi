@@ -236,6 +236,13 @@ html {
 /* Hide Emergent badge */
 #emergent-badge,
 [id*="emergent"],
-[class*="emergent-badge"] {
+[class*="emergent-badge"],
+a[href*="emergent.sh"][style*="position: fixed"] {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
