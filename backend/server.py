@@ -623,6 +623,32 @@ async def update_countdown_settings(input: CountdownSettingsUpdate, username: st
     updated = await db.countdown_settings.find_one({"id": "countdown_settings"}, {"_id": 0})
     return CountdownSettings(**updated)
 
+# ======== Meeting Address Settings ========
+
+@api_router.get("/meeting-address", response_model=MeetingAddressSettings)
+async def get_meeting_address_settings():
+    """Get meeting address and description"""
+    settings = await db.meeting_address_settings.find_one({"id": "meeting_address_settings"}, {"_id": 0})
+    if not settings:
+        default = MeetingAddressSettings()
+        await db.meeting_address_settings.insert_one(default.model_dump())
+        return default
+    return MeetingAddressSettings(**settings)
+
+@api_router.put("/admin/meeting-address", response_model=MeetingAddressSettings)
+async def update_meeting_address_settings(input: MeetingAddressSettingsUpdate, username: str = Depends(verify_token)):
+    """Update meeting address and description (Admin only)"""
+    existing = await db.meeting_address_settings.find_one({"id": "meeting_address_settings"}, {"_id": 0})
+    if not existing:
+        default = MeetingAddressSettings()
+        await db.meeting_address_settings.insert_one(default.model_dump())
+        existing = default.model_dump()
+    
+    update_data = {k: v for k, v in input.model_dump().items() if v is not None}
+    await db.meeting_address_settings.update_one({"id": "meeting_address_settings"}, {"$set": update_data})
+    updated = await db.meeting_address_settings.find_one({"id": "meeting_address_settings"}, {"_id": 0})
+    return MeetingAddressSettings(**updated)
+
 
 # ======== Image Upload ========
 
