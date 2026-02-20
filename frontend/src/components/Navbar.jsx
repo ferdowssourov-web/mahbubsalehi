@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Scale } from 'lucide-react';
+import { Menu, X, Scale, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const navLinks = [
-  { name: 'প্রচ্ছদ', path: '/' },
-  { name: 'জীবনী', path: '/biography' },
-  { name: 'ভিশন', path: '/vision' },
-  { name: 'কার্যক্রম', path: '/activities' },
-  { name: 'যোগাযোগ', path: '/contact' },
+  { name: 'প্রচ্ছদ', mobileName: 'প্রচ্ছদ', path: '/' },
+  { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography' },
+  { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision' },
+  { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities' },
+  { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions' },
+  { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact' },
 ];
 
 const Navbar = () => {
