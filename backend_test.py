@@ -8,6 +8,7 @@ class BengaliPortfolioAPITester:
         self.api_url = f"{base_url}/api"
         self.tests_run = 0
         self.tests_passed = 0
+        self.admin_token = None
         print(f"Testing Bengali Political Portfolio API at: {self.api_url}")
 
     def run_test(self, name, method, endpoint, expected_status, data=None):
