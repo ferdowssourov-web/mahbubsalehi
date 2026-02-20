@@ -416,8 +416,50 @@ const AdminDashboard = () => {
     }
   };
 
+  // Registration management functions
+  const updateRegistrationStatus = async (id, status) => {
+    try {
+      await axios.put(`${API}/admin/registrations/${id}`, { status }, getAuthHeaders());
+      fetchRegistrations();
+      showToast('success', 'স্ট্যাটাস আপডেট হয়েছে');
+    } catch {
+      showToast('error', 'আপডেট করতে সমস্যা হয়েছে');
+    }
+  };
+
+  const handleDeleteRegistration = async (id) => {
+    if (!window.confirm('আপনি কি নিশ্চিত এই রেজিষ্ট্রেশন মুছে ফেলতে চান?')) return;
+    try {
+      await axios.delete(`${API}/admin/registrations/${id}`, getAuthHeaders());
+      showToast('success', 'রেজিষ্ট্রেশন মুছে ফেলা হয়েছে');
+      fetchRegistrations();
+    } catch {
+      showToast('error', 'মুছে ফেলতে সমস্যা হয়েছে');
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      pending: { bg: 'bg-amber-100 text-amber-700', icon: Clock, label: 'অপেক্ষমান' },
+      approved: { bg: 'bg-blue-100 text-blue-700', icon: CheckCircle2, label: 'অনুমোদিত' },
+      completed: { bg: 'bg-emerald-100 text-emerald-700', icon: Check, label: 'সম্পন্ন' },
+      cancelled: { bg: 'bg-red-100 text-red-700', icon: XOctagon, label: 'বাতিল' },
+    };
+    const config = statusConfig[status] || statusConfig.pending;
+    const Icon = config.icon;
+    return (
+      <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-body font-medium rounded ${config.bg}`}>
+        <Icon className="w-3 h-3" />
+        {config.label}
+      </span>
+    );
+  };
+
   const approvedOpinions = opinions.filter(o => o.is_approved);
   const pendingOpinions = opinions.filter(o => !o.is_approved);
+  const pendingRegistrations = registrations.filter(r => r.status === 'pending');
+  const approvedRegistrations = registrations.filter(r => r.status === 'approved');
+  const completedRegistrations = registrations.filter(r => r.status === 'completed');
   const localGallery = galleryImages.filter(img => img.category === 'local');
   const internationalGallery = galleryImages.filter(img => img.category === 'international');
 
