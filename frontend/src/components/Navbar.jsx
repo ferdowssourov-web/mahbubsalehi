@@ -8,6 +8,7 @@ const navLinks = [
   { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography', special: false },
   { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision', special: false },
   { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities', special: false },
+  { name: 'গ্যালারি', mobileName: 'গ্যালারি', path: '/gallery', special: false },
   { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions', special: true },
   { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact', special: false },
 ];
