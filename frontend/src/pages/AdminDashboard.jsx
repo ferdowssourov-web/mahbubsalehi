@@ -213,6 +213,10 @@ const AdminDashboard = () => {
   const [galleryImages, setGalleryImages] = useState([]);
   const [registrations, setRegistrations] = useState([]);
   const [countdown, setCountdown] = useState({ is_active: false, target_date: '', title: 'তারুণ্যের মুখোমুখির পরবর্তী সময়' });
+  const [meetingAddress, setMeetingAddress] = useState({ 
+    address: 'উলিপুর, কুড়িগ্রাম, বাংলাদেশ',
+    description: 'ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার সমস্যা, পরামর্শ বা মতামত জানাতে নিচের ফর্মটি পূরণ করে রেজিষ্ট্রেশন সম্পূর্ণ করুন।'
+  });
   const [showForm, setShowForm] = useState(false);
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
