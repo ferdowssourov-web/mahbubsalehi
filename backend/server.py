@@ -158,6 +158,17 @@ class CountdownSettingsUpdate(BaseModel):
     target_date: Optional[str] = None
     title: Optional[str] = None
 
+# Meeting Address Settings Model
+class MeetingAddressSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "meeting_address_settings"
+    address: str = "উলিপুর, কুড়িগ্রাম, বাংলাদেশ"
+    description: str = "ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার সমস্যা, পরামর্শ বা মতামত জানাতে নিচের ফর্মটি পূরণ করে রেজিষ্ট্রেশন সম্পূর্ণ করুন।"
+
+class MeetingAddressSettingsUpdate(BaseModel):
+    address: Optional[str] = None
+    description: Optional[str] = None
+
 # Gallery Image Models
 class GalleryImage(BaseModel):
     model_config = ConfigDict(extra="ignore")
