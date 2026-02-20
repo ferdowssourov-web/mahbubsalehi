@@ -20,7 +20,7 @@ const mobileNavLinks = [
   { name: 'গ্যালারি', mobileName: 'গ্যালারি', path: '/gallery', special: false },
   { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography', special: false },
   { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact', special: false },
-  { name: 'জনতার মতামত', mobileName: 'জনতার মতামত', path: '/opinions', special: true },
+  { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions', special: true },
 ];
 
 const Navbar = () => {
