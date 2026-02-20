@@ -119,6 +119,20 @@ class PublicOpinionCreate(BaseModel):
 class PublicOpinionUpdate(BaseModel):
     is_approved: Optional[bool] = None
 
+# Gallery Image Models
+class GalleryImage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    image_url: str
+    caption: str = ""
+    category: str  # "local" or "international"
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class GalleryImageCreate(BaseModel):
+    image_url: str
+    caption: str = ""
+    category: str  # "local" or "international"
+
 
 # ======== Auth Helpers ========
 
