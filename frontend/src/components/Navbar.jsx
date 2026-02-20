@@ -59,18 +59,30 @@ const Navbar = () => {
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                data-testid={`nav-link-${link.path.replace('/', '') || 'home'}`}
-                className={`px-4 py-2 text-sm font-body font-medium rounded-sm transition-all duration-300 ${
-                  location.pathname === link.path
-                    ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-b-2 border-gold'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
-                }`}
-              >
-                {link.name}
-              </Link>
+              link.special ? (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-testid={`nav-link-${link.path.replace('/', '') || 'home'}`}
+                  className="relative px-5 py-2.5 text-sm font-body font-bold rounded-md bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50 hover:scale-105 transition-all duration-300 animate-pulse-subtle overflow-hidden group"
+                >
+                  <span className="relative z-10">{link.name}</span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                </Link>
+              ) : (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-testid={`nav-link-${link.path.replace('/', '') || 'home'}`}
+                  className={`px-4 py-2 text-sm font-body font-medium rounded-sm transition-all duration-300 ${
+                    location.pathname === link.path
+                      ? 'text-forest dark:text-emerald-400 bg-forest/5 dark:bg-emerald-400/10 border-b-2 border-gold'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
             
             {/* Theme Toggle */}
