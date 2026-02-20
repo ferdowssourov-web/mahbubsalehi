@@ -108,10 +108,15 @@ const ContactPage = () => {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(null);
+  const [meetingAddress, setMeetingAddress] = useState({
+    address: 'উলিপুর, কুড়িগ্রাম, বাংলাদেশ',
+    description: 'ব্যারিস্টার মাহবুবুল আলম সালেহী উলিপুরের প্রতিটি মানুষের কথা শুনতে চান। আপনার সমস্যা, পরামর্শ বা মতামত জানাতে নিচের ফর্মটি পূরণ করে রেজিষ্ট্রেশন সম্পূর্ণ করুন।'
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchCountdown();
+    fetchMeetingAddress();
   }, []);
 
   const fetchCountdown = async () => {
@@ -120,6 +125,15 @@ const ContactPage = () => {
       setCountdown(res.data);
     } catch (err) {
       console.error('Failed to fetch countdown', err);
+    }
+  };
+
+  const fetchMeetingAddress = async () => {
+    try {
+      const res = await axios.get(`${API}/meeting-address`);
+      setMeetingAddress(res.data);
+    } catch (err) {
+      console.error('Failed to fetch meeting address', err);
     }
   };
 
