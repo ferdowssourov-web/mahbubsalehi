@@ -211,6 +211,7 @@ const AdminDashboard = () => {
   const [contacts, setContacts] = useState([]);
   const [opinions, setOpinions] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
+  const [registrations, setRegistrations] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -261,6 +262,15 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+  const fetchRegistrations = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/admin/registrations`, getAuthHeaders());
+      setRegistrations(res.data);
+    } catch (err) {
+      if (err.response?.status === 401) { navigate('/admin'); return; }
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (!token) { navigate('/admin'); return; }
@@ -268,7 +278,8 @@ const AdminDashboard = () => {
     fetchContacts();
     fetchOpinions();
     fetchGallery();
-  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, navigate]);
+    fetchRegistrations();
+  }, [fetchActivities, fetchContacts, fetchOpinions, fetchGallery, fetchRegistrations, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
