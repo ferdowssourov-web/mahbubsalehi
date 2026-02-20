@@ -281,6 +281,26 @@ class BengaliPortfolioAPITester:
         
         return success
 
+    def test_admin_contacts(self):
+        """Test admin contacts endpoint"""
+        if not self.admin_token:
+            print("❌ No admin token available for contacts test")
+            return False
+            
+        success, response = self.run_test(
+            "GET Admin Contacts",
+            "GET",
+            "admin/contacts",
+            200,
+            require_auth=True
+        )
+        
+        if success and isinstance(response, list):
+            print(f"✅ Retrieved {len(response)} contact messages")
+            return True
+            
+        return False
+
     def test_activity_detail(self):
         """Test getting a single activity by ID"""
         # First get all activities to get a valid ID
