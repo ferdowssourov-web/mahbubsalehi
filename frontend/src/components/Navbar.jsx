@@ -160,7 +160,7 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-forest/10 dark:border-slate-700 mobile-menu-enter">
           <div className="px-4 py-4 space-y-1">
-            {navLinks.map((link) => (
+            {mobileNavLinks.map((link) => (
               link.special ? (
                 <Link
                   key={link.path}
@@ -185,6 +185,29 @@ const Navbar = () => {
                 </Link>
               )
             ))}
+            
+            {/* Social Media Icons in Mobile */}
+            <div className="flex items-center gap-4 px-4 py-3 border-t border-forest/10 dark:border-slate-700 mt-2">
+              <a
+                href="https://web.facebook.com/BarristerMahbubSalehiOfficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline transition-all"
+              >
+                <Facebook className="w-5 h-5" />
+                <span className="text-sm font-body">Facebook</span>
+              </a>
+              
+              <a
+                href="https://mahbubsalehi.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:underline transition-all"
+              >
+                <Globe className="w-5 h-5" />
+                <span className="text-sm font-body">Website</span>
+              </a>
+            </div>
           </div>
         </div>
       )}
