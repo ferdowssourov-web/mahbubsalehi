@@ -34,24 +34,27 @@ function PublicLayout({ children }) {
 
 function App() {
   return (
-    <div className="App font-body">
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
-          <Route path="/biography" element={<PublicLayout><BiographyPage /></PublicLayout>} />
-          <Route path="/vision" element={<PublicLayout><VisionPage /></PublicLayout>} />
-          <Route path="/activities" element={<PublicLayout><ActivitiesPage /></PublicLayout>} />
-          <Route path="/activities/:id" element={<PublicLayout><ActivityDetailPage /></PublicLayout>} />
-          <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
-          
-          {/* Admin routes - no navbar/footer */}
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <ThemeProvider>
+      <div className="App font-body">
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+            <Route path="/biography" element={<PublicLayout><BiographyPage /></PublicLayout>} />
+            <Route path="/vision" element={<PublicLayout><VisionPage /></PublicLayout>} />
+            <Route path="/activities" element={<PublicLayout><ActivitiesPage /></PublicLayout>} />
+            <Route path="/activities/:id" element={<PublicLayout><ActivityDetailPage /></PublicLayout>} />
+            <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
+            <Route path="/opinions" element={<PublicLayout><PublicOpinionPage /></PublicLayout>} />
+            
+            {/* Admin routes - no navbar/footer */}
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
 
