@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Scale, LogOut, Plus, Pencil, Trash2, Eye, EyeOff,
-  Newspaper, MessageSquare, ChevronDown, X, Save, AlertCircle, CheckCircle
+  Newspaper, MessageSquare, X, Save, AlertCircle, CheckCircle,
+  Upload, Image as ImageIcon, Loader2, GripVertical
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -13,6 +14,196 @@ const getAuthHeaders = () => ({
   headers: { Authorization: `Bearer ${localStorage.getItem('admin_token')}` }
 });
 
+const getImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('/api/uploads/')) return `${BACKEND_URL}${url}`;
+  return url;
+};
+
+// ====== Image Uploader Component ======
+const ImageUploader = ({ value, onChange }) => {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [urlMode, setUrlMode] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleUpload = async (file) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const token = localStorage.getItem('admin_token');
+      const res = await axios.post(`${API}/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      onChange(res.data.url);
+    } catch (e) {
+      console.error('Upload failed', e);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) handleUpload(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) handleUpload(file);
+  };
+
+  const handleUrlSubmit = () => {
+    if (urlInput.trim()) {
+      onChange(urlInput.trim());
+      setUrlInput('');
+      setUrlMode(false);
+    }
+  };
+
+  const handleRemove = () => {
+    onChange('');
+  };
+
+  // If there's already an image
+  if (value) {
+    return (
+      <div data-testid="image-uploader-preview" className="space-y-3">
+        <label className="block font-body text-sm text-navy font-medium mb-2">কভার ছবি</label>
+        <div className="relative group border border-slate-200 bg-slate-50 overflow-hidden">
+          <img
+            src={getImageUrl(value)}
+            alt="Preview"
+            className="w-full h-56 object-cover"
+            onError={(e) => { e.target.src = ''; e.target.className = 'w-full h-56 bg-slate-100'; }}
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="px-4 py-2 bg-white text-navy font-body text-sm font-medium hover:bg-slate-100 transition-colors"
+            >
+              পরিবর্তন করুন
+            </button>
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="px-4 py-2 bg-red-500 text-white font-body text-sm font-medium hover:bg-red-600 transition-colors"
+            >
+              মুছুন
+            </button>
+          </div>
+        </div>
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <label className="block font-body text-sm text-navy font-medium">কভার ছবি</label>
+
+      {!urlMode ? (
+        <>
+          {/* Drag & Drop area */}
+          <div
+            data-testid="image-upload-dropzone"
+            className={`relative border-2 border-dashed rounded-sm transition-all duration-300 cursor-pointer ${
+              dragOver ? 'border-gold bg-gold/5' : 'border-slate-300 hover:border-forest/40 hover:bg-forest/[0.02]'
+            }`}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => !uploading && fileInputRef.current?.click()}
+          >
+            <div className="flex flex-col items-center justify-center py-10 px-4">
+              {uploading ? (
+                <>
+                  <Loader2 className="w-10 h-10 text-forest animate-spin mb-3" />
+                  <p className="font-body text-sm text-slate-500">আপলোড হচ্ছে...</p>
+                </>
+              ) : (
+                <>
+                  <div className="w-14 h-14 bg-forest/5 rounded-full flex items-center justify-center mb-4">
+                    <Upload className="w-6 h-6 text-forest" />
+                  </div>
+                  <p className="font-body text-sm text-navy font-medium mb-1">ছবি আপলোড করুন</p>
+                  <p className="font-body text-xs text-slate-400 mb-3">ড্র্যাগ অ্যান্ড ড্রপ করুন অথবা ক্লিক করুন</p>
+                  <p className="font-body text-xs text-slate-400">JPG, PNG, WebP, GIF (সর্বোচ্চ 10MB)</p>
+                </>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
+              onChange={handleFileChange}
+              className="hidden"
+              data-testid="image-file-input"
+            />
+          </div>
+
+          {/* URL option */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-slate-200" />
+            <button
+              type="button"
+              onClick={() => setUrlMode(true)}
+              className="font-body text-xs text-slate-400 hover:text-forest transition-colors"
+              data-testid="switch-to-url-btn"
+            >
+              অথবা URL দিন
+            </button>
+            <div className="flex-1 h-px bg-slate-200" />
+          </div>
+        </>
+      ) : (
+        <>
+          {/* URL input mode */}
+          <div className="flex gap-2" data-testid="image-url-input-group">
+            <div className="flex-1 flex items-center gap-2 px-4 py-3 bg-white border border-slate-300 focus-within:border-forest focus-within:ring-1 focus-within:ring-forest transition-colors">
+              <ImageIcon className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <input
+                type="url"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleUrlSubmit())}
+                className="w-full bg-transparent font-body text-navy text-sm focus:outline-none"
+                placeholder="https://example.com/image.jpg"
+                data-testid="image-url-input"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleUrlSubmit}
+              className="px-4 bg-forest text-white font-body text-sm font-medium hover:bg-forest-deep transition-colors"
+            >
+              যোগ করুন
+            </button>
+            <button
+              type="button"
+              onClick={() => setUrlMode(false)}
+              className="px-3 border border-slate-300 text-slate-500 hover:bg-slate-50 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+
+// ====== Main Dashboard Component ======
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('activities');
   const [activities, setActivities] = useState([]);
@@ -77,6 +268,7 @@ const AdminDashboard = () => {
     });
     setEditingId(activity.id);
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e) => {
@@ -134,7 +326,7 @@ const AdminDashboard = () => {
     <main data-testid="admin-dashboard" className="min-h-screen bg-slate-50">
       {/* Toast */}
       {toast && (
-        <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-5 py-3 shadow-lg font-body text-sm ${
+        <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-5 py-3 shadow-lg font-body text-sm animate-fade-in ${
           toast.type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-red-50 border border-red-200 text-red-700'
         }`}>
           {toast.type === 'success' ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
@@ -213,7 +405,13 @@ const AdminDashboard = () => {
                   </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Image uploader - full width at top like pro blog */}
+                  <ImageUploader
+                    value={form.image_url}
+                    onChange={(url) => setForm({ ...form, image_url: url })}
+                  />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block font-body text-sm text-navy font-medium mb-2">শিরোনাম *</label>
@@ -241,29 +439,16 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block font-body text-sm text-navy font-medium mb-2">ছবির URL</label>
-                      <input
-                        type="url"
-                        data-testid="form-image-input"
-                        value={form.image_url}
-                        onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-body text-sm text-navy font-medium mb-2">তারিখ</label>
-                      <input
-                        type="text"
-                        data-testid="form-date-input"
-                        value={form.date}
-                        onChange={(e) => setForm({ ...form, date: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
-                        placeholder="যেমন: ২০২৫"
-                      />
-                    </div>
+                  <div>
+                    <label className="block font-body text-sm text-navy font-medium mb-2">তারিখ</label>
+                    <input
+                      type="text"
+                      data-testid="form-date-input"
+                      value={form.date}
+                      onChange={(e) => setForm({ ...form, date: e.target.value })}
+                      className="w-full md:w-1/2 px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors"
+                      placeholder="যেমন: জানুয়ারি ২০২৫"
+                    />
                   </div>
 
                   <div>
@@ -272,21 +457,16 @@ const AdminDashboard = () => {
                       data-testid="form-content-input"
                       value={form.content}
                       onChange={(e) => setForm({ ...form, content: e.target.value })}
-                      rows={5}
-                      className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors resize-none"
-                      placeholder="পোস্টের বিস্তারিত বিবরণ..."
+                      rows={8}
+                      className="w-full px-4 py-3 bg-white border border-slate-300 font-body text-navy focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-colors resize-y leading-relaxed"
+                      placeholder="পোস্টের বিস্তারিত বিবরণ লিখুন...
+
+আপনি এখানে একাধিক প্যারাগ্রাফ লিখতে পারেন। নতুন লাইনে যেতে Enter চাপুন।"
                     />
                   </div>
 
-                  {/* Image preview */}
-                  {form.image_url && (
-                    <div className="border border-slate-200 p-2 inline-block">
-                      <img src={form.image_url} alt="preview" className="h-32 object-cover" onError={(e) => e.target.style.display = 'none'} />
-                    </div>
-                  )}
-
                   <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-2 cursor-pointer">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         data-testid="form-published-checkbox"
@@ -294,11 +474,11 @@ const AdminDashboard = () => {
                         onChange={(e) => setForm({ ...form, is_published: e.target.checked })}
                         className="w-4 h-4 accent-forest"
                       />
-                      <span className="font-body text-sm text-navy">পাবলিশ করুন</span>
+                      <span className="font-body text-sm text-navy">সরাসরি পাবলিশ করুন</span>
                     </label>
                   </div>
 
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex gap-3 pt-2 border-t border-slate-100">
                     <button
                       type="submit"
                       data-testid="form-submit-btn"
@@ -306,7 +486,7 @@ const AdminDashboard = () => {
                       className="flex items-center gap-2 bg-forest hover:bg-forest-deep text-white font-body font-semibold px-6 py-3 transition-all duration-300 disabled:opacity-50"
                     >
                       {loading ? (
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
                         <Save className="w-4 h-4" />
                       )}
@@ -333,9 +513,13 @@ const AdminDashboard = () => {
                   className="bg-white border border-slate-200 p-4 flex items-center gap-4 hover:shadow-sm transition-shadow"
                 >
                   {/* Thumbnail */}
-                  {activity.image_url && (
+                  {activity.image_url ? (
                     <div className="w-20 h-16 flex-shrink-0 overflow-hidden bg-slate-100">
-                      <img src={activity.image_url} alt="" className="w-full h-full object-cover" />
+                      <img src={getImageUrl(activity.image_url)} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-16 flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                      <ImageIcon className="w-5 h-5 text-slate-300" />
                     </div>
                   )}
 
