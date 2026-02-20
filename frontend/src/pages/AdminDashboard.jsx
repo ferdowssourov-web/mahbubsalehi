@@ -333,6 +333,31 @@ const AdminDashboard = () => {
     }
   };
 
+  // Opinion management functions
+  const toggleOpinionApproval = async (opinion) => {
+    try {
+      await axios.put(`${API}/admin/opinions/${opinion.id}`, { is_approved: !opinion.is_approved }, getAuthHeaders());
+      fetchOpinions();
+      showToast('success', opinion.is_approved ? 'অনুমোদন বাতিল হয়েছে' : 'অনুমোদন হয়েছে');
+    } catch {
+      showToast('error', 'সমস্যা হয়েছে');
+    }
+  };
+
+  const handleDeleteOpinion = async (id) => {
+    if (!window.confirm('আপনি কি নিশ্চিত এই মতামত মুছে ফেলতে চান?')) return;
+    try {
+      await axios.delete(`${API}/admin/opinions/${id}`, getAuthHeaders());
+      showToast('success', 'মতামত মুছে ফেলা হয়েছে');
+      fetchOpinions();
+    } catch {
+      showToast('error', 'মুছে ফেলতে সমস্যা হয়েছে');
+    }
+  };
+
+  const approvedOpinions = opinions.filter(o => o.is_approved);
+  const pendingOpinions = opinions.filter(o => !o.is_approved);
+
   return (
     <main data-testid="admin-dashboard" className="min-h-screen bg-slate-50">
       {/* Toast */}
