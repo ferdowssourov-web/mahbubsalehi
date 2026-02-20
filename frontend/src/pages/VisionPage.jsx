@@ -280,7 +280,7 @@ const VisionPage = () => {
                 <div
                   key={item.id}
                   onClick={() => handleCardClick(item.slug)}
-                  className={`${item.color} border-l-4 p-6 md:p-8 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group`}
+                  className={`${item.lightColor} ${item.darkColor} border-l-4 p-6 md:p-8 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group`}
                 >
                   <div className="flex items-start gap-4">
                     <div className={`${item.iconBg} w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
@@ -288,17 +288,17 @@ const VisionPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-body text-xs font-bold text-gold bg-gold/10 px-2 py-0.5 rounded">
+                        <span className="font-body text-xs font-bold text-gold bg-gold/10 dark:bg-gold/20 px-2 py-0.5 rounded">
                           {item.id < 10 ? `০${item.id}` : `${item.id}`}
                         </span>
                       </div>
-                      <h3 className="font-heading text-lg md:text-xl text-navy dark:text-slate-800 font-bold mb-2 group-hover:text-forest transition-colors">
+                      <h3 className="font-heading text-lg md:text-xl text-navy dark:text-white font-bold mb-2 group-hover:text-forest dark:group-hover:text-emerald-400 transition-colors">
                         {item.title}
                       </h3>
-                      <p className="font-body text-slate-600 dark:text-slate-700 text-sm leading-relaxed">
+                      <p className="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                         {item.subtitle}
                       </p>
-                      <div className="flex items-center gap-1 mt-4 text-forest font-body text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="flex items-center gap-1 mt-4 text-forest dark:text-emerald-400 font-body text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <span>বিস্তারিত দেখুন</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
