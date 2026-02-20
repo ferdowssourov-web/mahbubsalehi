@@ -27,6 +27,13 @@ body {
   color: var(--navy);
 }
 
+/* Dark mode body */
+.dark body,
+html.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Noto Serif Bengali', serif;
 }
