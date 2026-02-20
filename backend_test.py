@@ -683,6 +683,10 @@ def main():
     if not tester.test_static_file_serving():
         print("❌ Static file serving test failed")
 
+    # Test Public Opinion API Flow (NEW FEATURE)
+    if not tester.test_public_opinion_flow():
+        print("❌ Public Opinion API flow test failed")
+
     # Print final results
     print("\n" + "=" * 60)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
