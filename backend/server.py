@@ -382,6 +382,38 @@ async def delete_opinion(opinion_id: str, username: str = Depends(verify_token))
         raise HTTPException(status_code=404, detail="Opinion not found")
     return {"message": "Opinion deleted"}
 
+
+# ======== Gallery (গ্যালারি) ========
+
+@api_router.get("/gallery", response_model=List[GalleryImage])
+async def get_gallery_images(category: Optional[str] = None):
+    query = {"category": category} if category else {}
+    images = await db.gallery_images.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return images
+
+@api_router.post("/admin/gallery", response_model=GalleryImage)
+async def create_gallery_image(input: GalleryImageCreate, username: str = Depends(verify_token)):
+    if input.category not in ["local", "international"]:
+        raise HTTPException(status_code=400, detail="Category must be 'local' or 'international'")
+    image_dict = input.model_dump()
+    image_obj = GalleryImage(**image_dict)
+    doc = image_obj.model_dump()
+    _ = await db.gallery_images.insert_one(doc)
+    return image_obj
+
+@api_router.get("/admin/gallery", response_model=List[GalleryImage])
+async def get_admin_gallery(username: str = Depends(verify_token)):
+    images = await db.gallery_images.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return images
+
+@api_router.delete("/admin/gallery/{image_id}")
+async def delete_gallery_image(image_id: str, username: str = Depends(verify_token)):
+    result = await db.gallery_images.delete_one({"id": image_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return {"message": "Image deleted"}
+
+
 # ======== Image Upload ========
 
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
