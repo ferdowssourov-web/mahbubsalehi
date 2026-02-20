@@ -45,6 +45,7 @@ function App() {
             <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
             <Route path="/biography" element={<PublicLayout><BiographyPage /></PublicLayout>} />
             <Route path="/vision" element={<PublicLayout><VisionPage /></PublicLayout>} />
+            <Route path="/vision/:slug" element={<PublicLayout><VisionDetailPage /></PublicLayout>} />
             <Route path="/activities" element={<PublicLayout><ActivitiesPage /></PublicLayout>} />
             <Route path="/activities/:id" element={<PublicLayout><ActivityDetailPage /></PublicLayout>} />
             <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
