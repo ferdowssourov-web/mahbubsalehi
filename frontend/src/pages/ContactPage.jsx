@@ -77,15 +77,6 @@ const ContactPage = () => {
                 </div>
                 <div className="flex items-start gap-4 p-5 bg-forest/5 border border-forest/10">
                   <div className="w-12 h-12 bg-forest/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-forest" />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-navy font-semibold mb-1">ফোন</h4>
-                    <p className="font-body text-slate-600 text-sm">+৮৮০ ১XXXXXXXXX</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 p-5 bg-forest/5 border border-forest/10">
-                  <div className="w-12 h-12 bg-forest/10 flex items-center justify-center flex-shrink-0">
                     <Mail className="w-5 h-5 text-forest" />
                   </div>
                   <div>
