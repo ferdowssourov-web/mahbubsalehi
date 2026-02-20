@@ -390,7 +390,7 @@ const AdminDashboard = () => {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
         {/* Tabs */}
-        <div className="flex gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-8">
           <button
             data-testid="tab-activities"
             onClick={() => setActiveTab('activities')}
@@ -410,6 +410,19 @@ const AdminDashboard = () => {
           >
             <MessageSquare className="w-4 h-4" />
             মেসেজ ({contacts.length})
+          </button>
+          <button
+            data-testid="tab-opinions"
+            onClick={() => setActiveTab('opinions')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-body font-medium text-sm transition-all ${
+              activeTab === 'opinions' ? 'bg-forest text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            জনমত ({opinions.length})
+            {pendingOpinions.length > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 bg-gold text-white text-xs rounded-full">{pendingOpinions.length}</span>
+            )}
           </button>
         </div>
 
