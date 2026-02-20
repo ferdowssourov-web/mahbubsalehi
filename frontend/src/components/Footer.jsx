@@ -114,7 +114,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-white/10 mt-14 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-white/40 text-sm">
-            &copy; ২০২৫ ব্যারিস্টার মাহবুবুল আলম সালেহী। সর্বস্বত্ব সংরক্ষিত।
+            &copy; ২০২৬ ব্যারিস্টার মাহবুবুল আলম সালেহী। সর্বস্বত্ব সংরক্ষিত।
           </p>
           <button
             onClick={scrollToTop}
