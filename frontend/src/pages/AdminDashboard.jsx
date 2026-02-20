@@ -1099,6 +1099,114 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Registrations Tab */}
+        {activeTab === 'registrations' && (
+          <div>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-heading text-2xl text-navy font-bold">সাক্ষাৎ রেজিষ্ট্রেশন</h2>
+              <div className="flex items-center gap-4 text-sm font-body">
+                <span className="flex items-center gap-1 text-amber-600">
+                  <Clock className="w-4 h-4" /> অপেক্ষমান: {pendingRegistrations.length}
+                </span>
+                <span className="flex items-center gap-1 text-blue-600">
+                  <CheckCircle2 className="w-4 h-4" /> অনুমোদিত: {approvedRegistrations.length}
+                </span>
+                <span className="flex items-center gap-1 text-emerald-600">
+                  <Check className="w-4 h-4" /> সম্পন্ন: {completedRegistrations.length}
+                </span>
+              </div>
+            </div>
+
+            {/* Registration List */}
+            <div className="space-y-4">
+              {registrations.map((reg) => (
+                <div
+                  key={reg.id}
+                  data-testid={`registration-row-${reg.id}`}
+                  className={`bg-white border p-5 hover:shadow-sm transition-shadow ${
+                    reg.status === 'pending' ? 'border-amber-200 bg-amber-50/30' : 'border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2 flex-wrap">
+                        <h4 className="font-heading text-lg text-navy font-semibold">{reg.name}</h4>
+                        {getStatusBadge(reg.status)}
+                      </div>
+                      <div className="flex items-center gap-4 text-sm font-body text-slate-500 mb-3 flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <MessageSquare className="w-3 h-3" /> {reg.phone}
+                        </span>
+                        {reg.area && (
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3" /> {reg.area}
+                          </span>
+                        )}
+                        {reg.subject && (
+                          <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">
+                            {reg.subject}
+                          </span>
+                        )}
+                      </div>
+                      {reg.message && (
+                        <p className="font-body text-slate-600 text-sm leading-relaxed bg-slate-50 p-3 rounded">
+                          {reg.message}
+                        </p>
+                      )}
+                      <p className="font-body text-xs text-slate-400 mt-3">
+                        {new Date(reg.created_at).toLocaleString('bn-BD')}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 flex-shrink-0">
+                      {reg.status === 'pending' && (
+                        <button
+                          onClick={() => updateRegistrationStatus(reg.id, 'approved')}
+                          className="px-3 py-1.5 bg-blue-500 text-white text-xs font-body rounded hover:bg-blue-600 transition-colors"
+                          title="অনুমোদন"
+                        >
+                          অনুমোদন
+                        </button>
+                      )}
+                      {reg.status === 'approved' && (
+                        <button
+                          onClick={() => updateRegistrationStatus(reg.id, 'completed')}
+                          className="px-3 py-1.5 bg-emerald-500 text-white text-xs font-body rounded hover:bg-emerald-600 transition-colors"
+                          title="সম্পন্ন"
+                        >
+                          সম্পন্ন
+                        </button>
+                      )}
+                      {(reg.status === 'pending' || reg.status === 'approved') && (
+                        <button
+                          onClick={() => updateRegistrationStatus(reg.id, 'cancelled')}
+                          className="px-3 py-1.5 bg-red-100 text-red-600 text-xs font-body rounded hover:bg-red-200 transition-colors"
+                          title="বাতিল"
+                        >
+                          বাতিল
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDeleteRegistration(reg.id)}
+                        className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                        title="মুছুন"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {registrations.length === 0 && (
+                <div className="text-center py-16 text-slate-400 font-body">
+                  কোনো রেজিষ্ট্রেশন নেই।
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
