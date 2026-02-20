@@ -464,6 +464,34 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDownloadRegistrationsExcel = async () => {
+    try {
+      showToast('info', 'ডাউনলোড শুরু হচ্ছে...');
+      const response = await axios.get(`${API}/admin/registrations/export/excel`, {
+        ...getAuthHeaders(),
+        responseType: 'blob'
+      });
+      
+      // Create blob URL and trigger download
+      const blob = new Blob([response.data], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `registrations_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      showToast('success', 'ফাইল ডাউনলোড সম্পন্ন হয়েছে');
+    } catch (error) {
+      console.error('Download error:', error);
+      showToast('error', 'ডাউনলোড করতে সমস্যা হয়েছে');
+    }
+  };
+
   const getStatusBadge = (status) => {
     const statusConfig = {
       pending: { bg: 'bg-amber-100 text-amber-700', icon: Clock, label: 'অপেক্ষমান' },
