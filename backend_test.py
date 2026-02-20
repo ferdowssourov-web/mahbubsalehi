@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 class BengaliPortfolioAPITester:
-    def __init__(self, base_url="https://mahbub-showcase.preview.emergentagent.com"):
+    def __init__(self, base_url="https://site-preview-132.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.tests_run = 0
