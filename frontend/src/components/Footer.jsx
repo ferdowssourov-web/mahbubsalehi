@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Scale, MapPin, Phone, Mail, Facebook, Globe, ArrowUp } from 'lucide-react';
+import { Scale, MapPin, Mail, Facebook, Globe, ArrowUp } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
