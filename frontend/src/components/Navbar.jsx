@@ -4,12 +4,12 @@ import { Menu, X, Scale, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const navLinks = [
-  { name: 'প্রচ্ছদ', mobileName: 'প্রচ্ছদ', path: '/' },
-  { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography' },
-  { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision' },
-  { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities' },
-  { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions' },
-  { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact' },
+  { name: 'প্রচ্ছদ', mobileName: 'প্রচ্ছদ', path: '/', special: false },
+  { name: 'জীবনী', mobileName: 'জীবনী', path: '/biography', special: false },
+  { name: 'ভিশন', mobileName: 'ভিশন', path: '/vision', special: false },
+  { name: 'কার্যক্রম', mobileName: 'কার্যক্রম', path: '/activities', special: false },
+  { name: 'জনতার মতামত', mobileName: 'জনমত', path: '/opinions', special: true },
+  { name: 'যোগাযোগ', mobileName: 'যোগাযোগ', path: '/contact', special: false },
 ];
 
 const Navbar = () => {
