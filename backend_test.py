@@ -456,6 +456,21 @@ def main():
     if not tester.test_admin_contacts():
         print("❌ Admin contacts test failed")
 
+    # NEW FEATURES TESTING
+    print("\n" + "🆕 TESTING NEW FEATURES" + "=" * 40)
+    
+    # Test activity detail endpoint
+    if not tester.test_activity_detail():
+        print("❌ Activity detail test failed")
+
+    # Test image upload functionality  
+    if not tester.test_image_upload():
+        print("❌ Image upload test failed")
+
+    # Test static file serving
+    if not tester.test_static_file_serving():
+        print("❌ Static file serving test failed")
+
     # Print final results
     print("\n" + "=" * 60)
     print(f"📊 FINAL RESULTS: {tester.tests_passed}/{tester.tests_run} tests passed")
