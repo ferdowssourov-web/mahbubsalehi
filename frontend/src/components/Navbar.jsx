@@ -96,11 +96,32 @@ const Navbar = () => {
               )
             ))}
             
+            {/* Social Media Icons */}
+            <a
+              href="https://web.facebook.com/BarristerMahbubSalehiOfficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 p-2 rounded-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              aria-label="Facebook Page"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+            
+            <a
+              href="https://mahbubsalehi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              aria-label="Official Website"
+            >
+              <Globe className="w-5 h-5" />
+            </a>
+            
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               data-testid="theme-toggle"
-              className="ml-2 p-2 rounded-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {theme === 'dark' ? (
