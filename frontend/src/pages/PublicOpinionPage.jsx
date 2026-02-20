@@ -82,8 +82,8 @@ const PublicOpinionPage = () => {
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-4 animate-fade-in-up">
             জনতার মতামত
           </h1>
-          <p className="font-body text-lg text-white/80 max-w-2xl mx-auto animate-fade-in-up delay-100">
-            আপনার মূল্যবান মতামত আমাদের কাছে অত্যন্ত গুরুত্বপূর্ণ। উলিপুরের উন্নয়নে আপনার চিন্তা ও পরামর্শ শেয়ার করুন।
+          <p className="font-body text-lg text-white/90 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-100">
+            আপনার মূল্যবান মতামত আমাদের কাছে অত্যন্ত গুরুত্বপূর্ণ। সমৃদ্ধ উলিপুর গড়তে আপনার আকাঙ্ক্ষা, চিন্তা ও পরামর্শ শেয়ার করুন।
           </p>
         </div>
       </section>
