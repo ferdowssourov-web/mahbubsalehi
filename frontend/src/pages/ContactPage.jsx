@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Mail, Send, CheckCircle, AlertCircle, User, Phone, FileText, MessageSquare, ChevronDown } from 'lucide-react';
+import { MapPin, Mail, Send, CheckCircle, AlertCircle, User, Phone, FileText, MessageSquare, ChevronDown, Clock } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -33,6 +33,70 @@ const SUBJECT_OPTIONS = [
   'অন্যান্য',
 ];
 
+// Convert number to Bengali digits
+const toBengaliDigits = (num) => {
+  const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return num.toString().split('').map(d => bengaliDigits[parseInt(d)] || d).join('');
+};
+
+// Countdown Component
+const CountdownTimer = ({ targetDate, title }) => {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const target = new Date(targetDate).getTime();
+      const now = new Date().getTime();
+      const difference = target - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000),
+        });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return (
+    <div className="mt-8">
+      <div className="flex items-center gap-2 mb-4">
+        <Clock className="w-5 h-5 text-gold animate-pulse" />
+        <p className="font-body text-sm text-white/80">{title}</p>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 text-center min-w-[70px]">
+          <span className="font-heading text-2xl md:text-3xl font-bold text-gold">{toBengaliDigits(timeLeft.days)}</span>
+          <p className="text-xs text-white/70 mt-1">দিন</p>
+        </div>
+        <span className="text-gold text-2xl font-bold">:</span>
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 text-center min-w-[70px]">
+          <span className="font-heading text-2xl md:text-3xl font-bold text-gold">{toBengaliDigits(timeLeft.hours.toString().padStart(2, '0'))}</span>
+          <p className="text-xs text-white/70 mt-1">ঘণ্টা</p>
+        </div>
+        <span className="text-gold text-2xl font-bold">:</span>
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 text-center min-w-[70px]">
+          <span className="font-heading text-2xl md:text-3xl font-bold text-gold">{toBengaliDigits(timeLeft.minutes.toString().padStart(2, '0'))}</span>
+          <p className="text-xs text-white/70 mt-1">মিনিট</p>
+        </div>
+        <span className="text-gold text-2xl font-bold">:</span>
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 text-center min-w-[70px]">
+          <span className="font-heading text-2xl md:text-3xl font-bold text-gold animate-pulse">{toBengaliDigits(timeLeft.seconds.toString().padStart(2, '0'))}</span>
+          <p className="text-xs text-white/70 mt-1">সেকেন্ড</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ContactPage = () => {
   const [form, setForm] = useState({ 
     name: '', 
@@ -43,10 +107,21 @@ const ContactPage = () => {
   });
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchCountdown();
   }, []);
+
+  const fetchCountdown = async () => {
+    try {
+      const res = await axios.get(`${API}/countdown`);
+      setCountdown(res.data);
+    } catch (err) {
+      console.error('Failed to fetch countdown', err);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -70,7 +145,7 @@ const ContactPage = () => {
   return (
     <main data-testid="contact-page" className="dark:bg-slate-900">
       {/* Page Hero */}
-      <section className="relative h-[40vh] min-h-[300px] flex items-center overflow-hidden bg-forest-deep">
+      <section className="relative min-h-[40vh] flex items-center overflow-hidden bg-forest-deep py-12">
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")`
         }} />
@@ -82,6 +157,14 @@ const ContactPage = () => {
           <p className="font-body text-white/70 text-lg mt-4 max-w-2xl">
             ব্যারিস্টার মাহবুব সালেহীর সাথে সাক্ষাৎ করে আপনার আকাঙ্ক্ষা, সমস্যা ও মতামত জানাতে রেজিষ্ট্রেশন করুন।
           </p>
+          
+          {/* Countdown Timer */}
+          {countdown && countdown.is_active && countdown.target_date && (
+            <CountdownTimer 
+              targetDate={countdown.target_date} 
+              title={countdown.title || "তারুণ্যের মুখোমুখির পরবর্তী সময়"} 
+            />
+          )}
         </div>
       </section>
 
