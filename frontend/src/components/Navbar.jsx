@@ -149,9 +149,9 @@ const Navbar = () => {
                       : 'text-slate-600 dark:text-slate-300 hover:text-forest dark:hover:text-emerald-400 hover:bg-forest/5 dark:hover:bg-emerald-400/10'
                   }`}
                 >
-              >
-                {link.mobileName}
-              </Link>
+                  {link.mobileName}
+                </Link>
+              )
             ))}
           </div>
         </div>
