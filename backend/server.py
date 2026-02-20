@@ -306,6 +306,27 @@ async def delete_contact(contact_id: str, username: str = Depends(verify_token))
         raise HTTPException(status_code=404, detail="Contact not found")
     return {"message": "Contact deleted"}
 
+# ======== Image Upload ========
+
+ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
+
+@api_router.post("/upload")
+async def upload_image(file: UploadFile = File(...), username: str = Depends(verify_token)):
+    ext = Path(file.filename).suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail=f"File type not allowed. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
+    
+    file_id = str(uuid.uuid4())
+    filename = f"{file_id}{ext}"
+    filepath = UPLOADS_DIR / filename
+    
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # Build the URL relative to the API
+    file_url = f"/api/uploads/{filename}"
+    return {"url": file_url, "filename": filename}
+
 
 # Include router
 app.include_router(api_router)
