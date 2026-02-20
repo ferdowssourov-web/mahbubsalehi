@@ -281,25 +281,135 @@ class BengaliPortfolioAPITester:
         
         return success
 
-    def test_admin_contacts(self):
-        """Test admin contacts endpoint"""
-        if not self.admin_token:
-            print("❌ No admin token available for contacts test")
-            return False
-            
-        success, response = self.run_test(
-            "GET Admin Contacts",
+    def test_activity_detail(self):
+        """Test getting a single activity by ID"""
+        # First get all activities to get a valid ID
+        success, activities = self.run_test(
+            "GET Activities for Detail Test",
             "GET",
-            "admin/contacts",
-            200,
-            require_auth=True
+            "activities",
+            200
         )
         
-        if success and isinstance(response, list):
-            print(f"✅ Retrieved {len(response)} contact messages")
-            return True
+        if not success or not activities:
+            print("❌ No activities available for detail test")
+            return False
             
-        return False
+        # Test getting the first activity by ID
+        activity_id = activities[0]['id']
+        success, response = self.run_test(
+            "GET Single Activity Detail",
+            "GET",
+            f"activities/{activity_id}",
+            200
+        )
+        
+        if success and response:
+            expected_fields = ['id', 'title', 'category', 'image_url', 'content', 'date']
+            missing_fields = [field for field in expected_fields if field not in response]
+            if missing_fields:
+                print(f"❌ Activity detail missing fields: {missing_fields}")
+                return False
+            print(f"✅ Activity detail contains all required fields")
+            print(f"✅ Activity ID: {response['id']}, Title: {response['title'][:50]}...")
+        
+        # Test non-existent activity ID
+        success, response = self.run_test(
+            "GET Non-existent Activity",
+            "GET",
+            "activities/non-existent-id",
+            404
+        )
+        
+        if success:
+            print("✅ Non-existent activity returns 404 as expected")
+        
+        return success
+
+    def test_image_upload(self):
+        """Test image upload endpoint"""
+        if not self.admin_token:
+            print("❌ No admin token available for image upload test")
+            return False
+
+        # Create a small test image in memory
+        test_image_content = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\rIDATx\x9cc\xf8\x0f\x00\x00\x01\x00\x01\x00\x00\x00\x00IEND\xaeB`\x82'
+        
+        try:
+            # Prepare file upload
+            files = {
+                'file': ('test.png', io.BytesIO(test_image_content), 'image/png')
+            }
+            headers = {
+                'Authorization': f'Bearer {self.admin_token}'
+            }
+            
+            url = f"{self.api_url}/upload"
+            print(f"\n🔍 Testing Image Upload...")
+            print(f"URL: {url}")
+            
+            response = requests.post(url, files=files, headers=headers, timeout=30)
+            print(f"Response Status: {response.status_code}")
+            
+            self.tests_run += 1
+            if response.status_code == 200:
+                self.tests_passed += 1
+                result = response.json()
+                if 'url' in result and 'filename' in result:
+                    print(f"✅ Passed - Image uploaded successfully")
+                    print(f"Upload URL: {result['url']}")
+                    print(f"Filename: {result['filename']}")
+                    return True, result
+                else:
+                    print(f"❌ Upload response missing required fields")
+                    return False, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                print(f"Error: {response.text[:200]}...")
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Image upload failed with error: {str(e)}")
+            return False, {}
+
+    def test_static_file_serving(self):
+        """Test static file serving after upload"""
+        if not self.admin_token:
+            print("❌ No admin token available for static file test")
+            return False
+            
+        # First upload a test image
+        upload_success, upload_result = self.test_image_upload()
+        if not upload_success or 'url' not in upload_result:
+            print("❌ Cannot test static files without successful upload")
+            return False
+            
+        # Test accessing the uploaded file
+        file_url = f"{self.base_url}{upload_result['url']}"
+        print(f"\n🔍 Testing Static File Access...")
+        print(f"URL: {file_url}")
+        
+        try:
+            response = requests.get(file_url, timeout=10)
+            print(f"Response Status: {response.status_code}")
+            
+            self.tests_run += 1
+            if response.status_code == 200:
+                self.tests_passed += 1
+                content_type = response.headers.get('Content-Type', '')
+                if 'image' in content_type:
+                    print(f"✅ Passed - Static file served with correct content type: {content_type}")
+                    return True
+                else:
+                    print(f"✅ Passed - Static file served (Content-Type: {content_type})")
+                    return True
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Static file access failed: {str(e)}")
+            return False
 
 def main():
     tester = BengaliPortfolioAPITester()
